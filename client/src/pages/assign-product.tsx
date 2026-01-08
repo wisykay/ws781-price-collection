@@ -9,6 +9,7 @@ interface Product {
   name: string;
   variant: string;
   usualPrice: number;
+  image: string;
 }
 
 interface DetectedPrice {
@@ -19,26 +20,26 @@ interface DetectedPrice {
 }
 
 const allProducts: Product[] = [
-  { id: "1", name: "GALLETAS MARIA 200G", variant: "Individual", usualPrice: 1.01 },
-  { id: "2", name: "GALLETAS SODA 200G", variant: "Individual", usualPrice: 0.99 },
-  { id: "3", name: "GALLETAS OREO 154G", variant: "Individual", usualPrice: 2.50 },
-  { id: "4", name: "GALLETAS CHIPS AHOY 128G", variant: "Individual", usualPrice: 2.25 },
-  { id: "5", name: "GALLETAS RITZ 100G", variant: "Individual", usualPrice: 1.75 },
-  { id: "6", name: "GALLETAS CLUB SOCIAL 234G", variant: "Pack x6", usualPrice: 3.25 },
-  { id: "7", name: "GALLETAS Festival 403G", variant: "Individual", usualPrice: 2.80 },
-  { id: "8", name: "GALLETAS DUCALES 294G", variant: "Individual", usualPrice: 2.15 },
-  { id: "9", name: "GALLETAS SALTINAS 300G", variant: "Individual", usualPrice: 1.95 },
-  { id: "10", name: "GALLETAS KRAKER BRAN 200G", variant: "Individual", usualPrice: 1.65 },
-  { id: "11", name: "GALLETAS NOEL RECREO 360G", variant: "Pack x12", usualPrice: 4.50 },
-  { id: "12", name: "GALLETAS BELVITA 250G", variant: "Individual", usualPrice: 3.10 },
-  { id: "13", name: "GALLETAS TOSH 270G", variant: "Individual", usualPrice: 2.45 },
-  { id: "14", name: "GALLETAS WAFER ITALO 100G", variant: "Individual", usualPrice: 0.85 },
-  { id: "15", name: "GALLETAS CIRCUS 200G", variant: "Individual", usualPrice: 1.20 },
-  { id: "16", name: "GALLETAS CHOCOCHIPS 150G", variant: "Individual", usualPrice: 1.80 },
-  { id: "17", name: "GALLETAS BARQUILLO 100G", variant: "Pack x4", usualPrice: 2.00 },
-  { id: "18", name: "GALLETAS ARTESANALES 300G", variant: "Individual", usualPrice: 3.50 },
-  { id: "19", name: "GALLETAS DIGESTIVE 400G", variant: "Individual", usualPrice: 2.90 },
-  { id: "20", name: "GALLETAS CHOCOLINAS 170G", variant: "Individual", usualPrice: 1.55 },
+  { id: "1", name: "GALLETAS MARIA 200G", variant: "Individual", usualPrice: 1.01, image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=80&h=80&fit=crop" },
+  { id: "2", name: "GALLETAS SODA 200G", variant: "Individual", usualPrice: 0.99, image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=80&h=80&fit=crop" },
+  { id: "3", name: "GALLETAS OREO 154G", variant: "Individual", usualPrice: 2.50, image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=80&h=80&fit=crop" },
+  { id: "4", name: "GALLETAS CHIPS AHOY 128G", variant: "Individual", usualPrice: 2.25, image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=80&h=80&fit=crop" },
+  { id: "5", name: "GALLETAS RITZ 100G", variant: "Individual", usualPrice: 1.75, image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=80&h=80&fit=crop" },
+  { id: "6", name: "GALLETAS CLUB SOCIAL 234G", variant: "Pack x6", usualPrice: 3.25, image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=80&h=80&fit=crop" },
+  { id: "7", name: "GALLETAS Festival 403G", variant: "Individual", usualPrice: 2.80, image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=80&h=80&fit=crop" },
+  { id: "8", name: "GALLETAS DUCALES 294G", variant: "Individual", usualPrice: 2.15, image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=80&h=80&fit=crop" },
+  { id: "9", name: "GALLETAS SALTINAS 300G", variant: "Individual", usualPrice: 1.95, image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=80&h=80&fit=crop" },
+  { id: "10", name: "GALLETAS KRAKER BRAN 200G", variant: "Individual", usualPrice: 1.65, image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=80&h=80&fit=crop" },
+  { id: "11", name: "GALLETAS NOEL RECREO 360G", variant: "Pack x12", usualPrice: 4.50, image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=80&h=80&fit=crop" },
+  { id: "12", name: "GALLETAS BELVITA 250G", variant: "Individual", usualPrice: 3.10, image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=80&h=80&fit=crop" },
+  { id: "13", name: "GALLETAS TOSH 270G", variant: "Individual", usualPrice: 2.45, image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=80&h=80&fit=crop" },
+  { id: "14", name: "GALLETAS WAFER ITALO 100G", variant: "Individual", usualPrice: 0.85, image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=80&h=80&fit=crop" },
+  { id: "15", name: "GALLETAS CIRCUS 200G", variant: "Individual", usualPrice: 1.20, image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=80&h=80&fit=crop" },
+  { id: "16", name: "GALLETAS CHOCOCHIPS 150G", variant: "Individual", usualPrice: 1.80, image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=80&h=80&fit=crop" },
+  { id: "17", name: "GALLETAS BARQUILLO 100G", variant: "Pack x4", usualPrice: 2.00, image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=80&h=80&fit=crop" },
+  { id: "18", name: "GALLETAS ARTESANALES 300G", variant: "Individual", usualPrice: 3.50, image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=80&h=80&fit=crop" },
+  { id: "19", name: "GALLETAS DIGESTIVE 400G", variant: "Individual", usualPrice: 2.90, image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=80&h=80&fit=crop" },
+  { id: "20", name: "GALLETAS CHOCOLINAS 170G", variant: "Individual", usualPrice: 1.55, image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=80&h=80&fit=crop" },
 ];
 
 const initialPrices: DetectedPrice[] = [
@@ -280,24 +281,28 @@ export default function AssignProductPage() {
                 </div>
 
                 {hasProducts && (
-                  <div className="px-3 pb-2 -mt-1 flex flex-wrap gap-1">
+                  <div className="px-3 pb-2 -mt-1 flex gap-1 overflow-x-auto">
                     {priceItem.assignedProducts.map((product) => (
-                      <span
+                      <div
                         key={product.id}
-                        className="inline-flex items-center gap-1 text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full"
+                        className="relative flex-shrink-0 group"
                       >
-                        {product.name.split(' ').slice(1, 3).join(' ')}
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-10 h-10 rounded-lg object-cover border-2 border-emerald-400"
+                        />
                         <button
                           data-testid={`button-remove-${priceItem.id}-${product.id}`}
                           onClick={(e) => {
                             e.stopPropagation();
                             removeProductFromPrice(priceItem.id, product.id);
                           }}
-                          className="hover:text-red-500"
+                          className="absolute -top-1 -right-1 w-4 h-4 bg-slate-700 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                         >
-                          <X className="w-3 h-3" />
+                          <X className="w-2.5 h-2.5 text-white" />
                         </button>
-                      </span>
+                      </div>
                     ))}
                   </div>
                 )}
@@ -323,16 +328,21 @@ export default function AssignProductPage() {
                           />
                         </div>
 
-                        <div className="max-h-32 overflow-y-auto space-y-1">
+                        <div className="max-h-36 overflow-y-auto space-y-1">
                           {getAvailableProducts().length > 0 ? (
                             getAvailableProducts().slice(0, 6).map((product) => (
                               <button
                                 key={product.id}
                                 data-testid={`product-${priceItem.id}-${product.id}`}
                                 onClick={() => addProductToPrice(priceItem.id, product)}
-                                className="w-full flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-white text-left text-sm text-slate-700"
+                                className="w-full flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-white text-left"
                               >
-                                <span className="truncate">{product.name}</span>
+                                <img
+                                  src={product.image}
+                                  alt={product.name}
+                                  className="w-8 h-8 rounded-md object-cover flex-shrink-0"
+                                />
+                                <span className="text-sm text-slate-700 truncate flex-1">{product.name}</span>
                                 <Plus className="w-4 h-4 text-primary flex-shrink-0" />
                               </button>
                             ))
