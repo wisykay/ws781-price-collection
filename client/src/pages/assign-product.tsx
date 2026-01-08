@@ -279,11 +279,26 @@ export default function AssignProductPage() {
                   </div>
                 </div>
 
-                {hasProducts && !isExpanded && (
-                  <div className="px-3 pb-3 -mt-1">
-                    <div className="text-xs text-slate-500 truncate">
-                      {priceItem.assignedProducts.map(p => p.name.split(' ')[1]).join(', ')}
-                    </div>
+                {hasProducts && (
+                  <div className="px-3 pb-2 -mt-1 flex flex-wrap gap-1">
+                    {priceItem.assignedProducts.map((product) => (
+                      <span
+                        key={product.id}
+                        className="inline-flex items-center gap-1 text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full"
+                      >
+                        {product.name.split(' ').slice(1, 3).join(' ')}
+                        <button
+                          data-testid={`button-remove-${priceItem.id}-${product.id}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeProductFromPrice(priceItem.id, product.id);
+                          }}
+                          className="hover:text-red-500"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </span>
+                    ))}
                   </div>
                 )}
 
@@ -296,29 +311,6 @@ export default function AssignProductPage() {
                       className="overflow-hidden"
                     >
                       <div className="border-t border-slate-100 p-3 bg-slate-50">
-                        {hasProducts && (
-                          <div className="mb-3 space-y-1">
-                            {priceItem.assignedProducts.map((product) => (
-                              <div
-                                key={product.id}
-                                className="flex items-center justify-between py-2 px-3 bg-white rounded-lg border border-slate-100"
-                              >
-                                <div className="flex items-center gap-2 min-w-0">
-                                  <Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                                  <span className="text-sm text-slate-700 truncate">{product.name}</span>
-                                </div>
-                                <button
-                                  data-testid={`button-remove-${priceItem.id}-${product.id}`}
-                                  onClick={() => removeProductFromPrice(priceItem.id, product.id)}
-                                  className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-red-50 text-slate-400 hover:text-red-500"
-                                >
-                                  <X className="w-4 h-4" />
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-
                         <div className="relative mb-2">
                           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                           <input
@@ -327,25 +319,25 @@ export default function AssignProductPage() {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             data-testid={`input-search-${priceItem.id}`}
-                            className="w-full h-10 pl-10 pr-4 rounded-lg bg-white border border-slate-200 text-sm outline-none focus:border-primary"
+                            className="w-full h-9 pl-9 pr-3 rounded-lg bg-white border border-slate-200 text-sm outline-none focus:border-primary"
                           />
                         </div>
 
-                        <div className="max-h-40 overflow-y-auto space-y-1">
+                        <div className="max-h-32 overflow-y-auto space-y-1">
                           {getAvailableProducts().length > 0 ? (
-                            getAvailableProducts().slice(0, 8).map((product) => (
+                            getAvailableProducts().slice(0, 6).map((product) => (
                               <button
                                 key={product.id}
                                 data-testid={`product-${priceItem.id}-${product.id}`}
                                 onClick={() => addProductToPrice(priceItem.id, product)}
-                                className="w-full flex items-center justify-between py-2 px-3 rounded-lg bg-white border border-slate-100 hover:border-primary/30 hover:bg-primary/5 text-left"
+                                className="w-full flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-white text-left text-sm text-slate-700"
                               >
-                                <span className="text-sm text-slate-700 truncate">{product.name}</span>
+                                <span className="truncate">{product.name}</span>
                                 <Plus className="w-4 h-4 text-primary flex-shrink-0" />
                               </button>
                             ))
                           ) : (
-                            <p className="text-center text-sm text-slate-400 py-3">
+                            <p className="text-center text-xs text-slate-400 py-2">
                               {searchQuery ? "Sin resultados" : "Todos asignados"}
                             </p>
                           )}
