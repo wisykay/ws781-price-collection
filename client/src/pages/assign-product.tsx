@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Search, Check, ChevronRight, Tag } from "lucide-react";
+import { ArrowLeft, Search, Check, Tag, Pencil, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface DetectedPrice {
@@ -18,7 +18,7 @@ interface Product {
   image: string;
 }
 
-const detectedPrices: DetectedPrice[] = [
+const initialPrices: DetectedPrice[] = [
   {
     id: "1",
     image: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=200&h=200&fit=crop",
@@ -74,11 +74,14 @@ const products: Product[] = [
 
 export default function AssignProductPage() {
   const [, navigate] = useLocation();
+  const [prices, setPrices] = useState<DetectedPrice[]>(initialPrices);
   const [selectedPrice, setSelectedPrice] = useState<string>("1");
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isEditingPrice, setIsEditingPrice] = useState(false);
+  const [editValue, setEditValue] = useState("");
 
-  const currentPrice = detectedPrices.find((p) => p.id === selectedPrice);
+  const currentPrice = prices.find((p) => p.id === selectedPrice);
   
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -88,6 +91,28 @@ export default function AssignProductPage() {
     if (selectedProduct) {
       navigate("/");
     }
+  };
+
+  const startEditing = () => {
+    if (currentPrice) {
+      setEditValue(currentPrice.price.toFixed(2));
+      setIsEditingPrice(true);
+    }
+  };
+
+  const saveEdit = () => {
+    const numValue = parseFloat(editValue);
+    if (!isNaN(numValue) && numValue >= 0 && currentPrice) {
+      setPrices(prices.map(p => 
+        p.id === currentPrice.id ? { ...p, price: numValue } : p
+      ));
+    }
+    setIsEditingPrice(false);
+  };
+
+  const cancelEdit = () => {
+    setIsEditingPrice(false);
+    setEditValue("");
   };
 
   return (
@@ -124,24 +149,87 @@ export default function AssignProductPage() {
               <Tag className="w-4 h-4 text-primary" />
               <span className="text-sm font-medium text-slate-600">Precio seleccionado:</span>
             </div>
-            <span className="text-2xl font-bold text-primary">
-              $ {currentPrice?.price.toFixed(2)}
-            </span>
+            
+            <AnimatePresence mode="wait">
+              {isEditingPrice ? (
+                <motion.div
+                  key="editing"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="flex items-center gap-2"
+                >
+                  <span className="text-xl font-bold text-primary">$</span>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
+                    data-testid="input-edit-current-price"
+                    autoFocus
+                    className="w-24 text-xl font-bold text-primary bg-white border border-primary/30 rounded-lg px-2 py-1 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") saveEdit();
+                      if (e.key === "Escape") cancelEdit();
+                    }}
+                  />
+                  <button
+                    data-testid="button-save-current-price"
+                    onClick={saveEdit}
+                    className="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white hover:bg-primary/90 transition-colors"
+                  >
+                    <Check className="w-4 h-4" />
+                  </button>
+                  <button
+                    data-testid="button-cancel-edit-current"
+                    onClick={cancelEdit}
+                    className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="display"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="flex items-center gap-2"
+                >
+                  <span className="text-2xl font-bold text-primary">
+                    $ {currentPrice?.price.toFixed(2)}
+                  </span>
+                  <button
+                    data-testid="button-edit-current-price"
+                    onClick={startEditing}
+                    className="w-8 h-8 flex items-center justify-center rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
+          <p className="text-xs text-muted-foreground">
+            Toca el lápiz para corregir el precio si el OCR lo capturó mal
+          </p>
         </div>
 
         <div className="flex items-center justify-between mb-4">
           <span className="text-sm text-muted-foreground">Selecciona el precio a asignar</span>
-          <span className="text-primary font-medium text-sm">{detectedPrices.length} precios</span>
+          <span className="text-primary font-medium text-sm">{prices.length} precios</span>
         </div>
 
         <div className="flex gap-3 overflow-x-auto pb-4 mb-6 -mx-4 px-4">
-          {detectedPrices.map((item) => (
+          {prices.map((item) => (
             <motion.button
               key={item.id}
               whileTap={{ scale: 0.95 }}
               data-testid={`price-thumb-${item.id}`}
-              onClick={() => setSelectedPrice(item.id)}
+              onClick={() => {
+                setSelectedPrice(item.id);
+                setIsEditingPrice(false);
+              }}
               className={`relative flex-shrink-0 rounded-xl overflow-hidden transition-all ${
                 selectedPrice === item.id
                   ? "ring-2 ring-primary ring-offset-2"
@@ -153,11 +241,16 @@ export default function AssignProductPage() {
                 alt={`$${item.price}`}
                 className="w-16 h-16 object-cover"
               />
+              <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm px-1 py-0.5">
+                <span className="text-[10px] font-bold text-white">
+                  ${item.price.toFixed(2)}
+                </span>
+              </div>
               {selectedPrice === item.id && (
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="absolute inset-0 bg-primary/20 flex items-center justify-center"
+                  className="absolute top-1 right-1"
                 >
                   <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center">
                     <Check className="w-3 h-3 text-white" />

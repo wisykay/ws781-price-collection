@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { motion } from "framer-motion";
-import { ArrowLeft, Check, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, Check, Sparkles, Pencil, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface DetectedPrice {
@@ -10,7 +10,7 @@ interface DetectedPrice {
   price: number;
 }
 
-const detectedPrices: DetectedPrice[] = [
+const initialPrices: DetectedPrice[] = [
   {
     id: "1",
     image: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=200&h=200&fit=crop",
@@ -35,12 +35,36 @@ const detectedPrices: DetectedPrice[] = [
 
 export default function SelectPricePage() {
   const [, navigate] = useLocation();
+  const [prices, setPrices] = useState<DetectedPrice[]>(initialPrices);
   const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState("");
 
   const handleContinue = () => {
     if (selectedPrice) {
       navigate("/assign-product");
     }
+  };
+
+  const startEditing = (e: React.MouseEvent, item: DetectedPrice) => {
+    e.stopPropagation();
+    setEditingId(item.id);
+    setEditValue(item.price.toFixed(2));
+  };
+
+  const saveEdit = (id: string) => {
+    const numValue = parseFloat(editValue);
+    if (!isNaN(numValue) && numValue >= 0) {
+      setPrices(prices.map(p => 
+        p.id === id ? { ...p, price: numValue } : p
+      ));
+    }
+    setEditingId(null);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditValue("");
   };
 
   return (
@@ -71,26 +95,30 @@ export default function SelectPricePage() {
       </header>
 
       <main className="flex-1 px-4 py-6 pb-32 max-w-lg mx-auto w-full">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-primary" />
             <h2 className="text-lg font-semibold text-slate-800">
               Selecciona un precio detectado
             </h2>
           </div>
-          <span className="text-primary font-medium">{detectedPrices.length} precios</span>
+          <span className="text-primary font-medium">{prices.length} precios</span>
         </div>
+        
+        <p className="text-sm text-muted-foreground mb-6">
+          Toca el lápiz para corregir si el OCR capturó mal el precio
+        </p>
 
         <div className="grid grid-cols-2 gap-4 mb-8">
-          {detectedPrices.map((item, index) => (
-            <motion.button
+          {prices.map((item, index) => (
+            <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               data-testid={`price-card-${item.id}`}
-              onClick={() => setSelectedPrice(item.id)}
-              className={`relative bg-white rounded-2xl overflow-hidden card-shadow transition-all ${
+              onClick={() => editingId !== item.id && setSelectedPrice(item.id)}
+              className={`relative bg-white rounded-2xl overflow-hidden card-shadow transition-all cursor-pointer ${
                 selectedPrice === item.id
                   ? "ring-2 ring-primary ring-offset-2"
                   : "hover:shadow-lg"
@@ -102,7 +130,7 @@ export default function SelectPricePage() {
                   alt={`Precio $${item.price}`}
                   className="w-full h-full object-cover"
                 />
-                {selectedPrice === item.id && (
+                {selectedPrice === item.id && editingId !== item.id && (
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
@@ -112,16 +140,74 @@ export default function SelectPricePage() {
                   </motion.div>
                 )}
               </div>
-              <div className={`py-3 px-4 text-center transition-colors ${
+              
+              <div className={`py-3 px-3 transition-colors ${
                 selectedPrice === item.id ? "bg-primary/5" : "bg-white"
               }`}>
-                <span className={`text-lg font-bold ${
-                  selectedPrice === item.id ? "text-primary" : "text-slate-800"
-                }`}>
-                  $ {item.price.toFixed(2)}
-                </span>
+                <AnimatePresence mode="wait">
+                  {editingId === item.id ? (
+                    <motion.div
+                      key="editing"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center gap-2"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <span className="text-lg font-bold text-slate-800">$</span>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                        data-testid={`input-price-${item.id}`}
+                        autoFocus
+                        className="flex-1 w-full text-lg font-bold text-primary bg-white border border-primary/30 rounded-lg px-2 py-1 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") saveEdit(item.id);
+                          if (e.key === "Escape") cancelEdit();
+                        }}
+                      />
+                      <button
+                        data-testid={`button-save-price-${item.id}`}
+                        onClick={() => saveEdit(item.id)}
+                        className="w-7 h-7 flex items-center justify-center rounded-full bg-primary text-white hover:bg-primary/90 transition-colors"
+                      >
+                        <Check className="w-4 h-4" />
+                      </button>
+                      <button
+                        data-testid={`button-cancel-edit-${item.id}`}
+                        onClick={cancelEdit}
+                        className="w-7 h-7 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="display"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center justify-center gap-2"
+                    >
+                      <span className={`text-lg font-bold ${
+                        selectedPrice === item.id ? "text-primary" : "text-slate-800"
+                      }`}>
+                        $ {item.price.toFixed(2)}
+                      </span>
+                      <button
+                        data-testid={`button-edit-price-${item.id}`}
+                        onClick={(e) => startEditing(e, item)}
+                        className="w-6 h-6 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-primary/10 hover:text-primary transition-colors"
+                      >
+                        <Pencil className="w-3 h-3" />
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-            </motion.button>
+            </motion.div>
           ))}
         </div>
 
