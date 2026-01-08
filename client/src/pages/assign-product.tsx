@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Search, Check, Tag, Pencil, X, ZoomIn, ChevronDown, Grid3X3 } from "lucide-react";
+import { ArrowLeft, Search, Check, Pencil, X, ZoomIn, ChevronDown, ChevronUp, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface DetectedPrice {
   id: string;
   image: string;
   price: number;
+  assignedProduct?: Product | null;
 }
 
 interface Product {
@@ -19,92 +20,74 @@ interface Product {
 }
 
 const initialPrices: DetectedPrice[] = [
-  { id: "1", image: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=200&h=200&fit=crop", price: 1.01 },
-  { id: "2", image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200&h=200&fit=crop", price: 0.98 },
-  { id: "3", image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop", price: 0.74 },
-  { id: "4", image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=200&h=200&fit=crop", price: 12.0 },
-  { id: "5", image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=200&h=200&fit=crop", price: 2.50 },
-  { id: "6", image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&h=200&fit=crop", price: 3.25 },
-  { id: "7", image: "https://images.unsplash.com/photo-1553531384-cc64ac80f931?w=200&h=200&fit=crop", price: 4.99 },
-  { id: "8", image: "https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?w=200&h=200&fit=crop", price: 1.75 },
-  { id: "9", image: "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=200&h=200&fit=crop", price: 0.85 },
-  { id: "10", image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=200&fit=crop", price: 5.50 },
+  { id: "1", image: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=200&h=200&fit=crop", price: 1.01, assignedProduct: null },
+  { id: "2", image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200&h=200&fit=crop", price: 0.98, assignedProduct: null },
+  { id: "3", image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop", price: 0.74, assignedProduct: null },
+  { id: "4", image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=200&h=200&fit=crop", price: 12.0, assignedProduct: null },
+  { id: "5", image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=200&h=200&fit=crop", price: 2.50, assignedProduct: null },
+  { id: "6", image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&h=200&fit=crop", price: 3.25, assignedProduct: null },
 ];
 
 const products: Product[] = [
-  {
-    id: "1",
-    name: "PAN HARINA MAIZ AMARILLA 1KG",
-    variant: "Individual",
-    usualPrice: 1.01,
-    image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=100&h=100&fit=crop",
-  },
-  {
-    id: "2",
-    name: "PAN HARINA MAIZ BLANCO 1KG",
-    variant: "Individual",
-    usualPrice: 0.99,
-    image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=100&h=100&fit=crop",
-  },
-  {
-    id: "3",
-    name: "HARINA DE TRIGO 1KG",
-    variant: "Pack x3",
-    usualPrice: 2.50,
-    image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=100&h=100&fit=crop",
-  },
-  {
-    id: "4",
-    name: "AVENA QUAKER 400G",
-    variant: "Individual",
-    usualPrice: 1.75,
-    image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=100&h=100&fit=crop",
-  },
+  { id: "1", name: "PAN HARINA MAIZ AMARILLA 1KG", variant: "Individual", usualPrice: 1.01, image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=100&h=100&fit=crop" },
+  { id: "2", name: "PAN HARINA MAIZ BLANCO 1KG", variant: "Individual", usualPrice: 0.99, image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=100&h=100&fit=crop" },
+  { id: "3", name: "HARINA DE TRIGO 1KG", variant: "Pack x3", usualPrice: 2.50, image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=100&h=100&fit=crop" },
+  { id: "4", name: "AVENA QUAKER 400G", variant: "Individual", usualPrice: 1.75, image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=100&h=100&fit=crop" },
+  { id: "5", name: "ACEITE VEGETAL 1L", variant: "Individual", usualPrice: 3.25, image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=100&h=100&fit=crop" },
+  { id: "6", name: "ARROZ TIPO 1 1KG", variant: "Individual", usualPrice: 0.85, image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=100&h=100&fit=crop" },
+  { id: "7", name: "LECHE EN POLVO 400G", variant: "Individual", usualPrice: 4.50, image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=100&h=100&fit=crop" },
+  { id: "8", name: "AZUCAR REFINADA 1KG", variant: "Individual", usualPrice: 0.75, image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=100&h=100&fit=crop" },
 ];
 
 export default function AssignProductPage() {
   const [, navigate] = useLocation();
   const [prices, setPrices] = useState<DetectedPrice[]>(initialPrices);
-  const [selectedPrice, setSelectedPrice] = useState<string>("1");
-  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+  const [expandedPriceId, setExpandedPriceId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isEditingPrice, setIsEditingPrice] = useState(false);
+  const [editingPriceId, setEditingPriceId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
   const [previewImage, setPreviewImage] = useState<DetectedPrice | null>(null);
-  const [showAllPrices, setShowAllPrices] = useState(false);
 
-  const currentPrice = prices.find((p) => p.id === selectedPrice);
-  
+  const assignedCount = prices.filter(p => p.assignedProduct).length;
+  const progress = (assignedCount / prices.length) * 100;
+
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleConfirm = () => {
-    if (selectedProduct) {
+  const handleConfirmAll = () => {
+    if (assignedCount === prices.length) {
       navigate("/");
     }
   };
 
-  const startEditing = () => {
-    if (currentPrice) {
-      setEditValue(currentPrice.price.toFixed(2));
-      setIsEditingPrice(true);
-    }
+  const assignProduct = (priceId: string, product: Product) => {
+    setPrices(prices.map(p => 
+      p.id === priceId ? { ...p, assignedProduct: product } : p
+    ));
+    setExpandedPriceId(null);
+    setSearchQuery("");
   };
 
-  const saveEdit = () => {
+  const unassignProduct = (priceId: string) => {
+    setPrices(prices.map(p => 
+      p.id === priceId ? { ...p, assignedProduct: null } : p
+    ));
+  };
+
+  const startEditingPrice = (price: DetectedPrice) => {
+    setEditingPriceId(price.id);
+    setEditValue(price.price.toFixed(2));
+  };
+
+  const saveEditedPrice = (priceId: string) => {
     const numValue = parseFloat(editValue);
-    if (!isNaN(numValue) && numValue >= 0 && currentPrice) {
+    if (!isNaN(numValue) && numValue >= 0) {
       setPrices(prices.map(p => 
-        p.id === currentPrice.id ? { ...p, price: numValue } : p
+        p.id === priceId ? { ...p, price: numValue } : p
       ));
     }
-    setIsEditingPrice(false);
-  };
-
-  const cancelEdit = () => {
-    setIsEditingPrice(false);
-    setEditValue("");
+    setEditingPriceId(null);
   };
 
   return (
@@ -168,10 +151,14 @@ export default function AssignProductPage() {
         </div>
         
         <div className="px-4 pb-4">
-          <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs text-muted-foreground">Progreso de asignación</span>
+            <span className="text-xs font-medium text-primary">{assignedCount}/{prices.length} asignados</span>
+          </div>
+          <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
             <motion.div
-              initial={{ width: "50%" }}
-              animate={{ width: "100%" }}
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
               transition={{ duration: 0.5 }}
               className="h-full bg-primary rounded-full"
             />
@@ -179,284 +166,205 @@ export default function AssignProductPage() {
         </div>
       </header>
 
-      <main className="flex-1 px-4 py-6 pb-32 max-w-lg mx-auto w-full">
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2">
-              <Tag className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-slate-600">Precio seleccionado:</span>
-            </div>
-            
-            <AnimatePresence mode="wait">
-              {isEditingPrice ? (
-                <motion.div
-                  key="editing"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  className="flex items-center gap-2"
-                >
-                  <span className="text-xl font-bold text-primary">$</span>
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={editValue}
-                    onChange={(e) => setEditValue(e.target.value)}
-                    data-testid="input-edit-current-price"
-                    autoFocus
-                    className="w-24 text-xl font-bold text-primary bg-white border border-primary/30 rounded-lg px-2 py-1 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") saveEdit();
-                      if (e.key === "Escape") cancelEdit();
-                    }}
-                  />
-                  <button
-                    data-testid="button-save-current-price"
-                    onClick={saveEdit}
-                    className="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white hover:bg-primary/90 transition-colors"
-                  >
-                    <Check className="w-4 h-4" />
-                  </button>
-                  <button
-                    data-testid="button-cancel-edit-current"
-                    onClick={cancelEdit}
-                    className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="display"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  className="flex items-center gap-2"
-                >
-                  <span className="text-2xl font-bold text-primary">
-                    $ {currentPrice?.price.toFixed(2)}
-                  </span>
-                  <button
-                    data-testid="button-edit-current-price"
-                    onClick={startEditing}
-                    className="w-8 h-8 flex items-center justify-center rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
-                  >
-                    <Pencil className="w-4 h-4" />
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Toca el lápiz para corregir el precio si el OCR lo capturó mal
-          </p>
-        </div>
-
-        <div className="mb-4">
-          <button
-            data-testid="button-toggle-prices"
-            onClick={() => setShowAllPrices(!showAllPrices)}
-            className="w-full flex items-center justify-between p-3 bg-white rounded-xl border border-slate-200 hover:border-primary/30 transition-colors"
-          >
-            <div className="flex items-center gap-2">
-              <Grid3X3 className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-slate-700">
-                {showAllPrices ? "Ocultar precios" : "Ver todos los precios"}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-primary font-semibold text-sm">{prices.length} precios</span>
-              <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${showAllPrices ? "rotate-180" : ""}`} />
-            </div>
-          </button>
-        </div>
-
-        <AnimatePresence>
-          {showAllPrices && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden mb-6"
-            >
-              <div className="grid grid-cols-4 gap-2 p-3 bg-slate-50 rounded-2xl">
-                {prices.map((item) => (
-                  <div key={item.id} className="relative">
-                    <motion.button
-                      whileTap={{ scale: 0.95 }}
-                      data-testid={`price-grid-${item.id}`}
-                      onClick={() => {
-                        setSelectedPrice(item.id);
-                        setIsEditingPrice(false);
-                      }}
-                      className={`relative w-full aspect-square rounded-xl overflow-hidden transition-all ${
-                        selectedPrice === item.id
-                          ? "ring-2 ring-primary ring-offset-1"
-                          : "opacity-80 hover:opacity-100"
-                      }`}
-                    >
-                      <img
-                        src={item.image}
-                        alt={`$${item.price}`}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute bottom-0 left-0 right-0 bg-black/70 backdrop-blur-sm px-1 py-0.5">
-                        <span className="text-[10px] font-bold text-white">
-                          ${item.price.toFixed(2)}
-                        </span>
-                      </div>
-                      {selectedPrice === item.id && (
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          className="absolute top-0.5 left-0.5"
-                        >
-                          <div className="w-4 h-4 bg-primary rounded-full flex items-center justify-center">
-                            <Check className="w-2.5 h-2.5 text-white" />
-                          </div>
-                        </motion.div>
-                      )}
-                    </motion.button>
-                    <button
-                      data-testid={`button-zoom-grid-${item.id}`}
-                      onClick={() => setPreviewImage(item)}
-                      className="absolute top-0.5 right-0.5 w-5 h-5 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-slate-700 hover:bg-white transition-colors shadow-sm"
-                    >
-                      <ZoomIn className="w-2.5 h-2.5" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {!showAllPrices && (
-          <div className="flex gap-2 overflow-x-auto pb-3 mb-4 -mx-4 px-4">
-            {prices.slice(0, 5).map((item) => (
-              <motion.button
-                key={item.id}
-                whileTap={{ scale: 0.95 }}
-                data-testid={`price-thumb-${item.id}`}
-                onClick={() => {
-                  setSelectedPrice(item.id);
-                  setIsEditingPrice(false);
-                }}
-                className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all ${
-                  selectedPrice === item.id
-                    ? "ring-2 ring-primary ring-offset-1"
-                    : "opacity-70 hover:opacity-100"
-                }`}
-              >
-                <img
-                  src={item.image}
-                  alt={`$${item.price}`}
-                  className="w-14 h-14 object-cover"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-black/70 px-1 py-0.5">
-                  <span className="text-[9px] font-bold text-white">
-                    ${item.price.toFixed(2)}
-                  </span>
-                </div>
-                {selectedPrice === item.id && (
-                  <div className="absolute top-0.5 left-0.5 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
-                    <Check className="w-2.5 h-2.5 text-white" />
-                  </div>
-                )}
-              </motion.button>
-            ))}
-            {prices.length > 5 && (
-              <button
-                onClick={() => setShowAllPrices(true)}
-                className="flex-shrink-0 w-14 h-14 rounded-lg bg-primary/10 flex flex-col items-center justify-center text-primary hover:bg-primary/20 transition-colors"
-              >
-                <span className="text-sm font-bold">+{prices.length - 5}</span>
-                <span className="text-[8px]">más</span>
-              </button>
-            )}
-          </div>
-        )}
-
-        <div className="mb-6">
-          <p className="text-sm font-medium text-slate-700 mb-3">
-            Productos sugeridos para el precio seleccionado
-          </p>
-          
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Buscar un producto"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              data-testid="input-search-product"
-              className="w-full h-12 pl-12 pr-4 rounded-xl bg-white border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-            />
-          </div>
-        </div>
+      <main className="flex-1 px-4 py-4 pb-32 max-w-lg mx-auto w-full">
+        <p className="text-sm text-muted-foreground mb-4">
+          Asigna un producto a cada precio capturado. Toca la imagen para ampliar.
+        </p>
 
         <div className="space-y-3">
-          <AnimatePresence>
-            {filteredProducts.map((product, index) => (
-              <motion.button
-                key={product.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ delay: index * 0.05 }}
-                data-testid={`product-card-${product.id}`}
-                onClick={() => setSelectedProduct(product.id)}
-                className={`w-full flex items-center gap-4 p-4 rounded-2xl bg-white card-shadow border transition-all ${
-                  selectedProduct === product.id
-                    ? "border-primary ring-1 ring-primary"
-                    : "border-slate-100 hover:border-slate-200"
-                }`}
-              >
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-14 h-14 rounded-xl object-cover"
-                />
-                
-                <div className="flex-1 text-left">
-                  <h4 className="font-semibold text-slate-800 text-sm leading-tight mb-1">
-                    {product.name}
-                  </h4>
-                  <p className="text-xs text-muted-foreground mb-1">{product.variant}</p>
-                  <p className="text-xs text-slate-500">
-                    Generalmente <span className="font-medium text-slate-700">${product.usualPrice.toFixed(2)}</span>
-                  </p>
-                </div>
-                
-                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
-                  selectedProduct === product.id
-                    ? "bg-primary border-primary"
-                    : "border-slate-300"
-                }`}>
-                  {selectedProduct === product.id && (
-                    <Check className="w-3.5 h-3.5 text-white" />
+          {prices.map((priceItem, index) => (
+            <motion.div
+              key={priceItem.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+              className={`bg-white rounded-2xl card-shadow border overflow-hidden transition-all ${
+                priceItem.assignedProduct 
+                  ? "border-emerald-200" 
+                  : expandedPriceId === priceItem.id 
+                    ? "border-primary" 
+                    : "border-slate-100"
+              }`}
+            >
+              <div className="p-3 flex items-center gap-3">
+                <div className="relative">
+                  <button
+                    data-testid={`button-preview-${priceItem.id}`}
+                    onClick={() => setPreviewImage(priceItem)}
+                    className="relative"
+                  >
+                    <img
+                      src={priceItem.image}
+                      alt={`Precio ${priceItem.price}`}
+                      className="w-16 h-16 rounded-xl object-cover"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/30 rounded-xl transition-colors">
+                      <ZoomIn className="w-5 h-5 text-white opacity-0 hover:opacity-100" />
+                    </div>
+                  </button>
+                  {priceItem.assignedProduct && (
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
                   )}
                 </div>
-              </motion.button>
-            ))}
-          </AnimatePresence>
-        </div>
 
-        {filteredProducts.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">No se encontraron productos</p>
-          </div>
-        )}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    {editingPriceId === priceItem.id ? (
+                      <div className="flex items-center gap-1">
+                        <span className="font-bold text-primary">$</span>
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          data-testid={`input-price-${priceItem.id}`}
+                          autoFocus
+                          className="w-20 text-lg font-bold text-primary bg-white border border-primary/30 rounded-lg px-2 py-0.5 outline-none focus:border-primary"
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") saveEditedPrice(priceItem.id);
+                            if (e.key === "Escape") setEditingPriceId(null);
+                          }}
+                        />
+                        <button
+                          onClick={() => saveEditedPrice(priceItem.id)}
+                          className="w-6 h-6 flex items-center justify-center rounded-full bg-primary text-white"
+                        >
+                          <Check className="w-3 h-3" />
+                        </button>
+                        <button
+                          onClick={() => setEditingPriceId(null)}
+                          className="w-6 h-6 flex items-center justify-center rounded-full bg-slate-100 text-slate-600"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <span className="text-xl font-bold text-primary">
+                          ${priceItem.price.toFixed(2)}
+                        </span>
+                        <button
+                          data-testid={`button-edit-${priceItem.id}`}
+                          onClick={() => startEditingPrice(priceItem)}
+                          className="w-6 h-6 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-primary/10 hover:text-primary transition-colors"
+                        >
+                          <Pencil className="w-3 h-3" />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                  
+                  {priceItem.assignedProduct ? (
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-slate-700 truncate">
+                        {priceItem.assignedProduct.name}
+                      </span>
+                      <button
+                        data-testid={`button-unassign-${priceItem.id}`}
+                        onClick={() => unassignProduct(priceItem.id)}
+                        className="text-xs text-red-500 hover:text-red-600 font-medium"
+                      >
+                        Cambiar
+                      </button>
+                    </div>
+                  ) : (
+                    <span className="text-sm text-muted-foreground">Sin asignar</span>
+                  )}
+                </div>
+
+                {!priceItem.assignedProduct && (
+                  <button
+                    data-testid={`button-expand-${priceItem.id}`}
+                    onClick={() => setExpandedPriceId(expandedPriceId === priceItem.id ? null : priceItem.id)}
+                    className={`w-10 h-10 flex items-center justify-center rounded-full transition-colors ${
+                      expandedPriceId === priceItem.id 
+                        ? "bg-primary text-white" 
+                        : "bg-primary/10 text-primary hover:bg-primary/20"
+                    }`}
+                  >
+                    {expandedPriceId === priceItem.id ? (
+                      <ChevronUp className="w-5 h-5" />
+                    ) : (
+                      <Package className="w-5 h-5" />
+                    )}
+                  </button>
+                )}
+              </div>
+
+              <AnimatePresence>
+                {expandedPriceId === priceItem.id && !priceItem.assignedProduct && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden border-t border-slate-100"
+                  >
+                    <div className="p-3 bg-slate-50">
+                      <div className="relative mb-3">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                        <input
+                          type="text"
+                          placeholder="Buscar producto..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          data-testid={`input-search-${priceItem.id}`}
+                          className="w-full h-10 pl-10 pr-4 rounded-xl bg-white border border-slate-200 text-sm focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none"
+                        />
+                      </div>
+
+                      <div className="space-y-2 max-h-48 overflow-y-auto">
+                        {filteredProducts.map((product) => (
+                          <button
+                            key={product.id}
+                            data-testid={`product-${priceItem.id}-${product.id}`}
+                            onClick={() => assignProduct(priceItem.id, product)}
+                            className="w-full flex items-center gap-3 p-2 rounded-xl bg-white border border-slate-100 hover:border-primary/30 hover:bg-primary/5 transition-colors text-left"
+                          >
+                            <img
+                              src={product.image}
+                              alt={product.name}
+                              className="w-10 h-10 rounded-lg object-cover"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-slate-800 truncate">
+                                {product.name}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {product.variant} · Usual ${product.usualPrice.toFixed(2)}
+                              </p>
+                            </div>
+                            <div className="w-5 h-5 rounded-full border-2 border-slate-300" />
+                          </button>
+                        ))}
+                        
+                        {filteredProducts.length === 0 && (
+                          <p className="text-center text-sm text-muted-foreground py-4">
+                            No se encontraron productos
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          ))}
+        </div>
       </main>
 
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white via-white to-transparent pt-8">
         <Button
-          data-testid="button-confirm-assignment"
-          onClick={handleConfirm}
-          disabled={!selectedProduct}
+          data-testid="button-confirm-all"
+          onClick={handleConfirmAll}
+          disabled={assignedCount < prices.length}
           className="w-full h-14 rounded-2xl bg-primary hover:bg-primary/90 text-lg font-semibold card-shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Confirmar asignación
+          {assignedCount < prices.length 
+            ? `Asignar ${prices.length - assignedCount} precios pendientes`
+            : "Confirmar todas las asignaciones"
+          }
         </Button>
       </div>
     </div>
