@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Search, Check, Tag, Pencil, X, ZoomIn } from "lucide-react";
+import { ArrowLeft, Search, Check, Tag, Pencil, X, ZoomIn, ChevronDown, Grid3X3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface DetectedPrice {
@@ -19,26 +19,16 @@ interface Product {
 }
 
 const initialPrices: DetectedPrice[] = [
-  {
-    id: "1",
-    image: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=200&h=200&fit=crop",
-    price: 1.01,
-  },
-  {
-    id: "2",
-    image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200&h=200&fit=crop",
-    price: 0.98,
-  },
-  {
-    id: "3",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop",
-    price: 0.74,
-  },
-  {
-    id: "4",
-    image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=200&h=200&fit=crop",
-    price: 12.0,
-  },
+  { id: "1", image: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=200&h=200&fit=crop", price: 1.01 },
+  { id: "2", image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200&h=200&fit=crop", price: 0.98 },
+  { id: "3", image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop", price: 0.74 },
+  { id: "4", image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=200&h=200&fit=crop", price: 12.0 },
+  { id: "5", image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=200&h=200&fit=crop", price: 2.50 },
+  { id: "6", image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&h=200&fit=crop", price: 3.25 },
+  { id: "7", image: "https://images.unsplash.com/photo-1553531384-cc64ac80f931?w=200&h=200&fit=crop", price: 4.99 },
+  { id: "8", image: "https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?w=200&h=200&fit=crop", price: 1.75 },
+  { id: "9", image: "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=200&h=200&fit=crop", price: 0.85 },
+  { id: "10", image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=200&fit=crop", price: 5.50 },
 ];
 
 const products: Product[] = [
@@ -81,6 +71,7 @@ export default function AssignProductPage() {
   const [isEditingPrice, setIsEditingPrice] = useState(false);
   const [editValue, setEditValue] = useState("");
   const [previewImage, setPreviewImage] = useState<DetectedPrice | null>(null);
+  const [showAllPrices, setShowAllPrices] = useState(false);
 
   const currentPrice = prices.find((p) => p.id === selectedPrice);
   
@@ -261,62 +252,130 @@ export default function AssignProductPage() {
           </p>
         </div>
 
-        <div className="flex items-center justify-between mb-4">
-          <span className="text-sm text-muted-foreground">Selecciona el precio a asignar</span>
-          <span className="text-primary font-medium text-sm">{prices.length} precios</span>
+        <div className="mb-4">
+          <button
+            data-testid="button-toggle-prices"
+            onClick={() => setShowAllPrices(!showAllPrices)}
+            className="w-full flex items-center justify-between p-3 bg-white rounded-xl border border-slate-200 hover:border-primary/30 transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              <Grid3X3 className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-slate-700">
+                {showAllPrices ? "Ocultar precios" : "Ver todos los precios"}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-primary font-semibold text-sm">{prices.length} precios</span>
+              <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${showAllPrices ? "rotate-180" : ""}`} />
+            </div>
+          </button>
         </div>
 
-        <div className="flex gap-3 overflow-x-auto pb-4 mb-6 -mx-4 px-4">
-          {prices.map((item) => (
-            <div key={item.id} className="relative flex-shrink-0">
+        <AnimatePresence>
+          {showAllPrices && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden mb-6"
+            >
+              <div className="grid grid-cols-4 gap-2 p-3 bg-slate-50 rounded-2xl">
+                {prices.map((item) => (
+                  <div key={item.id} className="relative">
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      data-testid={`price-grid-${item.id}`}
+                      onClick={() => {
+                        setSelectedPrice(item.id);
+                        setIsEditingPrice(false);
+                      }}
+                      className={`relative w-full aspect-square rounded-xl overflow-hidden transition-all ${
+                        selectedPrice === item.id
+                          ? "ring-2 ring-primary ring-offset-1"
+                          : "opacity-80 hover:opacity-100"
+                      }`}
+                    >
+                      <img
+                        src={item.image}
+                        alt={`$${item.price}`}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/70 backdrop-blur-sm px-1 py-0.5">
+                        <span className="text-[10px] font-bold text-white">
+                          ${item.price.toFixed(2)}
+                        </span>
+                      </div>
+                      {selectedPrice === item.id && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute top-0.5 left-0.5"
+                        >
+                          <div className="w-4 h-4 bg-primary rounded-full flex items-center justify-center">
+                            <Check className="w-2.5 h-2.5 text-white" />
+                          </div>
+                        </motion.div>
+                      )}
+                    </motion.button>
+                    <button
+                      data-testid={`button-zoom-grid-${item.id}`}
+                      onClick={() => setPreviewImage(item)}
+                      className="absolute top-0.5 right-0.5 w-5 h-5 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-slate-700 hover:bg-white transition-colors shadow-sm"
+                    >
+                      <ZoomIn className="w-2.5 h-2.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {!showAllPrices && (
+          <div className="flex gap-2 overflow-x-auto pb-3 mb-4 -mx-4 px-4">
+            {prices.slice(0, 5).map((item) => (
               <motion.button
+                key={item.id}
                 whileTap={{ scale: 0.95 }}
                 data-testid={`price-thumb-${item.id}`}
                 onClick={() => {
                   setSelectedPrice(item.id);
                   setIsEditingPrice(false);
                 }}
-                className={`relative rounded-xl overflow-hidden transition-all ${
+                className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all ${
                   selectedPrice === item.id
-                    ? "ring-2 ring-primary ring-offset-2"
+                    ? "ring-2 ring-primary ring-offset-1"
                     : "opacity-70 hover:opacity-100"
                 }`}
               >
                 <img
                   src={item.image}
                   alt={`$${item.price}`}
-                  className="w-20 h-20 object-cover"
+                  className="w-14 h-14 object-cover"
                 />
-                <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm px-1.5 py-1">
-                  <span className="text-xs font-bold text-white">
+                <div className="absolute bottom-0 left-0 right-0 bg-black/70 px-1 py-0.5">
+                  <span className="text-[9px] font-bold text-white">
                     ${item.price.toFixed(2)}
                   </span>
                 </div>
                 {selectedPrice === item.id && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute top-1 left-1"
-                  >
-                    <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                      <Check className="w-3 h-3 text-white" />
-                    </div>
-                  </motion.div>
+                  <div className="absolute top-0.5 left-0.5 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
+                    <Check className="w-2.5 h-2.5 text-white" />
+                  </div>
                 )}
               </motion.button>
+            ))}
+            {prices.length > 5 && (
               <button
-                data-testid={`button-zoom-${item.id}`}
-                onClick={() => setPreviewImage(item)}
-                className="absolute top-1 right-1 w-6 h-6 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-slate-700 hover:bg-white transition-colors shadow-sm"
+                onClick={() => setShowAllPrices(true)}
+                className="flex-shrink-0 w-14 h-14 rounded-lg bg-primary/10 flex flex-col items-center justify-center text-primary hover:bg-primary/20 transition-colors"
               >
-                <ZoomIn className="w-3.5 h-3.5" />
+                <span className="text-sm font-bold">+{prices.length - 5}</span>
+                <span className="text-[8px]">más</span>
               </button>
-            </div>
-          ))}
-          <div className="flex-shrink-0 w-20 h-20 rounded-xl border-2 border-dashed border-slate-200 flex items-center justify-center text-slate-400">
-            +
+            )}
           </div>
-        </div>
+        )}
 
         <div className="mb-6">
           <p className="text-sm font-medium text-slate-700 mb-3">
