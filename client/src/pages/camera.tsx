@@ -45,7 +45,7 @@ export default function CameraPage() {
           
           <Button
             data-testid="button-done"
-            onClick={() => navigate("/select-price")}
+            onClick={() => navigate("/assign-product")}
             className="px-6 h-11 rounded-full bg-primary hover:bg-primary/90 font-semibold"
           >
             Hecho

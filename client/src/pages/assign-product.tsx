@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Search, Check, Pencil, X, Image, ChevronUp, Plus } from "lucide-react";
+import { ArrowLeft, Search, Check, Pencil, X, Image, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Product {
@@ -58,7 +58,7 @@ const initialPrices: DetectedPrice[] = [
 export default function AssignProductPage() {
   const [, navigate] = useLocation();
   const [prices, setPrices] = useState<DetectedPrice[]>(initialPrices);
-  const [expandedPriceId, setExpandedPriceId] = useState<string | null>(null);
+  const [modalPriceId, setModalPriceId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [editingPriceId, setEditingPriceId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
@@ -67,6 +67,7 @@ export default function AssignProductPage() {
   const totalProductsAssigned = prices.reduce((sum, p) => sum + p.assignedProducts.length, 0);
   const totalProducts = allProducts.length;
   const progress = (totalProductsAssigned / totalProducts) * 100;
+  const unassignedCount = totalProducts - totalProductsAssigned;
 
   const getAssignedProductIds = () => {
     const ids = new Set<string>();
@@ -75,7 +76,7 @@ export default function AssignProductPage() {
   };
 
   const assignedProductIds = getAssignedProductIds();
-  const unassignedCount = totalProducts - totalProductsAssigned;
+  const modalPrice = prices.find(p => p.id === modalPriceId);
 
   const getAvailableProducts = () => {
     return allProducts.filter(p => 
@@ -96,7 +97,6 @@ export default function AssignProductPage() {
         ? { ...p, assignedProducts: [...p.assignedProducts, product] } 
         : p
     ));
-    setSearchQuery("");
   };
 
   const removeProductFromPrice = (priceId: string, productId: string) => {
@@ -120,6 +120,11 @@ export default function AssignProductPage() {
       ));
     }
     setEditingPriceId(null);
+  };
+
+  const isProductAssignedToThisPrice = (productId: string, priceId: string) => {
+    const price = prices.find(p => p.id === priceId);
+    return price?.assignedProducts.some(p => p.id === productId) ?? false;
   };
 
   return (
@@ -160,13 +165,158 @@ export default function AssignProductPage() {
         </motion.div>
       )}
     </AnimatePresence>
+
+    <AnimatePresence>
+      {modalPrice && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 bg-black/50 flex items-end"
+          onClick={() => {
+            setModalPriceId(null);
+            setSearchQuery("");
+          }}
+        >
+          <motion.div
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="w-full bg-white rounded-t-3xl max-h-[85vh] flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-4 border-b border-slate-100">
+              <div className="w-12 h-1 bg-slate-200 rounded-full mx-auto mb-4" />
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900">
+                    Productos para ${modalPrice.price.toFixed(2)}
+                  </h3>
+                  <p className="text-sm text-slate-500">
+                    {modalPrice.assignedProducts.length} asignados
+                  </p>
+                </div>
+                <button
+                  data-testid="button-close-modal"
+                  onClick={() => {
+                    setModalPriceId(null);
+                    setSearchQuery("");
+                  }}
+                  className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            <div className="p-4 border-b border-slate-100">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Buscar producto..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  data-testid="input-search-modal"
+                  className="w-full h-10 pl-10 pr-4 rounded-xl bg-slate-50 border border-slate-200 text-sm outline-none focus:border-primary"
+                />
+              </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-4">
+              {modalPrice.assignedProducts.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">
+                    Asignados a este precio
+                  </p>
+                  <div className="space-y-2">
+                    {modalPrice.assignedProducts.map((product) => (
+                      <div
+                        key={product.id}
+                        className="flex items-center gap-3 p-2 bg-emerald-50 rounded-xl border border-emerald-200"
+                      >
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-12 h-12 rounded-lg object-cover"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-slate-800">{product.name}</p>
+                          <p className="text-xs text-slate-500">{product.variant}</p>
+                        </div>
+                        <button
+                          data-testid={`button-remove-modal-${product.id}`}
+                          onClick={() => removeProductFromPrice(modalPrice.id, product.id)}
+                          className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-slate-400 hover:text-red-500"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {getAvailableProducts().length > 0 && (
+                <div>
+                  <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">
+                    Disponibles ({getAvailableProducts().length})
+                  </p>
+                  <div className="space-y-2">
+                    {getAvailableProducts().map((product) => (
+                      <button
+                        key={product.id}
+                        data-testid={`product-modal-${product.id}`}
+                        onClick={() => addProductToPrice(modalPrice.id, product)}
+                        className="w-full flex items-center gap-3 p-2 bg-white rounded-xl border border-slate-100 hover:border-primary/30 hover:bg-primary/5 text-left"
+                      >
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-12 h-12 rounded-lg object-cover"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-slate-800">{product.name}</p>
+                          <p className="text-xs text-slate-500">{product.variant} · Usual ${product.usualPrice.toFixed(2)}</p>
+                        </div>
+                        <Plus className="w-5 h-5 text-primary" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {getAvailableProducts().length === 0 && modalPrice.assignedProducts.length === 0 && (
+                <p className="text-center text-slate-400 py-8">
+                  Todos los productos ya están asignados a otros precios
+                </p>
+              )}
+            </div>
+
+            <div className="p-4 border-t border-slate-100">
+              <Button
+                data-testid="button-done-modal"
+                onClick={() => {
+                  setModalPriceId(null);
+                  setSearchQuery("");
+                }}
+                className="w-full h-12 rounded-xl bg-primary font-semibold"
+              >
+                Listo
+              </Button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
     
     <div className="min-h-screen bg-slate-50 flex flex-col">
-      <header className="sticky top-0 z-50 bg-white border-b border-slate-200">
+      <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
         <div className="flex items-center justify-between px-4 py-3">
           <button
             data-testid="button-back"
-            onClick={() => navigate("/select-price")}
+            onClick={() => navigate("/camera")}
             className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100"
           >
             <ArrowLeft className="w-5 h-5 text-slate-700" />
@@ -195,7 +345,6 @@ export default function AssignProductPage() {
       <main className="flex-1 px-4 py-4 pb-28">
         <div className="space-y-2">
           {prices.map((priceItem, index) => {
-            const isExpanded = expandedPriceId === priceItem.id;
             const hasProducts = priceItem.assignedProducts.length > 0;
             
             return (
@@ -208,10 +357,8 @@ export default function AssignProductPage() {
               >
                 <div 
                   className="flex items-center gap-3 p-3 cursor-pointer"
-                  onClick={() => {
-                    setExpandedPriceId(isExpanded ? null : priceItem.id);
-                    setSearchQuery("");
-                  }}
+                  onClick={() => setModalPriceId(priceItem.id)}
+                  data-testid={`price-row-${priceItem.id}`}
                 >
                   <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${hasProducts ? 'bg-emerald-50' : 'bg-primary/5'}`}>
                     {editingPriceId === priceItem.id ? (
@@ -241,11 +388,23 @@ export default function AssignProductPage() {
 
                   <div className="flex-1 min-w-0">
                     {hasProducts ? (
-                      <p className="text-sm text-slate-700">
-                        {priceItem.assignedProducts.length} producto{priceItem.assignedProducts.length > 1 ? 's' : ''}
-                      </p>
+                      <div className="flex items-center gap-1">
+                        {priceItem.assignedProducts.slice(0, 4).map((product) => (
+                          <img
+                            key={product.id}
+                            src={product.image}
+                            alt={product.name}
+                            className="w-8 h-8 rounded-md object-cover border-2 border-emerald-300"
+                          />
+                        ))}
+                        {priceItem.assignedProducts.length > 4 && (
+                          <span className="w-8 h-8 rounded-md bg-slate-100 flex items-center justify-center text-xs font-medium text-slate-600">
+                            +{priceItem.assignedProducts.length - 4}
+                          </span>
+                        )}
+                      </div>
                     ) : (
-                      <p className="text-sm text-slate-400">Sin productos</p>
+                      <p className="text-sm text-slate-400">Toca para asignar productos</p>
                     )}
                   </div>
 
@@ -272,90 +431,15 @@ export default function AssignProductPage() {
                       <Pencil className="w-4 h-4" />
                     </button>
 
-                    <div className={`w-8 h-8 flex items-center justify-center rounded-lg transition-colors ${
-                      isExpanded ? 'bg-primary text-white' : 'bg-primary/10 text-primary'
-                    }`}>
-                      {isExpanded ? <ChevronUp className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                    <div className={`w-8 h-8 flex items-center justify-center rounded-lg ${hasProducts ? 'bg-emerald-100 text-emerald-600' : 'bg-primary/10 text-primary'}`}>
+                      {hasProducts ? (
+                        <span className="text-xs font-bold">{priceItem.assignedProducts.length}</span>
+                      ) : (
+                        <Plus className="w-4 h-4" />
+                      )}
                     </div>
                   </div>
                 </div>
-
-                {hasProducts && (
-                  <div className="px-3 pb-2 -mt-1 flex gap-1 overflow-x-auto">
-                    {priceItem.assignedProducts.map((product) => (
-                      <div
-                        key={product.id}
-                        className="relative flex-shrink-0 group"
-                      >
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="w-10 h-10 rounded-lg object-cover border-2 border-emerald-400"
-                        />
-                        <button
-                          data-testid={`button-remove-${priceItem.id}-${product.id}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            removeProductFromPrice(priceItem.id, product.id);
-                          }}
-                          className="absolute -top-1 -right-1 w-4 h-4 bg-slate-700 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                          <X className="w-2.5 h-2.5 text-white" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                <AnimatePresence>
-                  {isExpanded && (
-                    <motion.div
-                      initial={{ height: 0 }}
-                      animate={{ height: "auto" }}
-                      exit={{ height: 0 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="border-t border-slate-100 p-3 bg-slate-50">
-                        <div className="relative mb-2">
-                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                          <input
-                            type="text"
-                            placeholder="Buscar producto..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            data-testid={`input-search-${priceItem.id}`}
-                            className="w-full h-9 pl-9 pr-3 rounded-lg bg-white border border-slate-200 text-sm outline-none focus:border-primary"
-                          />
-                        </div>
-
-                        <div className="max-h-36 overflow-y-auto space-y-1">
-                          {getAvailableProducts().length > 0 ? (
-                            getAvailableProducts().slice(0, 6).map((product) => (
-                              <button
-                                key={product.id}
-                                data-testid={`product-${priceItem.id}-${product.id}`}
-                                onClick={() => addProductToPrice(priceItem.id, product)}
-                                className="w-full flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-white text-left"
-                              >
-                                <img
-                                  src={product.image}
-                                  alt={product.name}
-                                  className="w-8 h-8 rounded-md object-cover flex-shrink-0"
-                                />
-                                <span className="text-sm text-slate-700 truncate flex-1">{product.name}</span>
-                                <Plus className="w-4 h-4 text-primary flex-shrink-0" />
-                              </button>
-                            ))
-                          ) : (
-                            <p className="text-center text-xs text-slate-400 py-2">
-                              {searchQuery ? "Sin resultados" : "Todos asignados"}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </motion.div>
             );
           })}
