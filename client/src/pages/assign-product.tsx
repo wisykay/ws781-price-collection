@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Search, Check, Tag, Pencil, X } from "lucide-react";
+import { ArrowLeft, Search, Check, Tag, Pencil, X, ZoomIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface DetectedPrice {
@@ -80,6 +80,7 @@ export default function AssignProductPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isEditingPrice, setIsEditingPrice] = useState(false);
   const [editValue, setEditValue] = useState("");
+  const [previewImage, setPreviewImage] = useState<DetectedPrice | null>(null);
 
   const currentPrice = prices.find((p) => p.id === selectedPrice);
   
@@ -116,6 +117,51 @@ export default function AssignProductPage() {
   };
 
   return (
+    <>
+    <AnimatePresence>
+      {previewImage && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[100] bg-black/90 flex flex-col"
+          onClick={() => setPreviewImage(null)}
+        >
+          <div className="flex items-center justify-between p-4">
+            <button
+              data-testid="button-close-preview"
+              onClick={() => setPreviewImage(null)}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <span className="text-white font-bold text-xl">
+              $ {previewImage.price.toFixed(2)}
+            </span>
+            <div className="w-10" />
+          </div>
+          
+          <div className="flex-1 flex items-center justify-center p-4">
+            <motion.img
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              src={previewImage.image.replace('w=200&h=200', 'w=800&h=800')}
+              alt="Vista ampliada"
+              className="max-w-full max-h-full rounded-2xl object-contain"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+          
+          <div className="p-4 pb-8">
+            <p className="text-center text-white/70 text-sm">
+              Toca fuera de la imagen para cerrar
+            </p>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+    
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
         <div className="flex items-center justify-between px-4 py-4">
@@ -222,44 +268,52 @@ export default function AssignProductPage() {
 
         <div className="flex gap-3 overflow-x-auto pb-4 mb-6 -mx-4 px-4">
           {prices.map((item) => (
-            <motion.button
-              key={item.id}
-              whileTap={{ scale: 0.95 }}
-              data-testid={`price-thumb-${item.id}`}
-              onClick={() => {
-                setSelectedPrice(item.id);
-                setIsEditingPrice(false);
-              }}
-              className={`relative flex-shrink-0 rounded-xl overflow-hidden transition-all ${
-                selectedPrice === item.id
-                  ? "ring-2 ring-primary ring-offset-2"
-                  : "opacity-70 hover:opacity-100"
-              }`}
-            >
-              <img
-                src={item.image}
-                alt={`$${item.price}`}
-                className="w-16 h-16 object-cover"
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm px-1 py-0.5">
-                <span className="text-[10px] font-bold text-white">
-                  ${item.price.toFixed(2)}
-                </span>
-              </div>
-              {selectedPrice === item.id && (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="absolute top-1 right-1"
-                >
-                  <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                    <Check className="w-3 h-3 text-white" />
-                  </div>
-                </motion.div>
-              )}
-            </motion.button>
+            <div key={item.id} className="relative flex-shrink-0">
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                data-testid={`price-thumb-${item.id}`}
+                onClick={() => {
+                  setSelectedPrice(item.id);
+                  setIsEditingPrice(false);
+                }}
+                className={`relative rounded-xl overflow-hidden transition-all ${
+                  selectedPrice === item.id
+                    ? "ring-2 ring-primary ring-offset-2"
+                    : "opacity-70 hover:opacity-100"
+                }`}
+              >
+                <img
+                  src={item.image}
+                  alt={`$${item.price}`}
+                  className="w-20 h-20 object-cover"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm px-1.5 py-1">
+                  <span className="text-xs font-bold text-white">
+                    ${item.price.toFixed(2)}
+                  </span>
+                </div>
+                {selectedPrice === item.id && (
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute top-1 left-1"
+                  >
+                    <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
+                  </motion.div>
+                )}
+              </motion.button>
+              <button
+                data-testid={`button-zoom-${item.id}`}
+                onClick={() => setPreviewImage(item)}
+                className="absolute top-1 right-1 w-6 h-6 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-slate-700 hover:bg-white transition-colors shadow-sm"
+              >
+                <ZoomIn className="w-3.5 h-3.5" />
+              </button>
+            </div>
           ))}
-          <div className="flex-shrink-0 w-16 h-16 rounded-xl border-2 border-dashed border-slate-200 flex items-center justify-center text-slate-400">
+          <div className="flex-shrink-0 w-20 h-20 rounded-xl border-2 border-dashed border-slate-200 flex items-center justify-center text-slate-400">
             +
           </div>
         </div>
@@ -347,5 +401,6 @@ export default function AssignProductPage() {
         </Button>
       </div>
     </div>
+    </>
   );
 }
