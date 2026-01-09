@@ -217,6 +217,7 @@ export default function CategoriesPage() {
                   
                   <button
                     data-testid={`button-manual-${category.id}`}
+                    onClick={() => navigate("/manual-price")}
                     className="mt-3 w-full h-10 rounded-xl border border-slate-200 flex items-center justify-center gap-2 text-slate-600 hover:bg-slate-50 transition-colors"
                   >
                     <Keyboard className="w-4 h-4" />
