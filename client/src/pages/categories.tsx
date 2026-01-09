@@ -206,17 +206,17 @@ export default function CategoriesPage() {
                     </button>
                   </div>
                   
-                  <div className="mt-3 flex items-center gap-3">
-                    <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-primary rounded-full" style={{ width: '39%' }} />
-                    </div>
-                    <button
-                      data-testid={`button-manual-${category.id}`}
-                      className="text-xs text-slate-400 hover:text-primary transition-colors"
-                    >
-                      + Manual
-                    </button>
+                  <div className="mt-3 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-primary rounded-full" style={{ width: '39%' }} />
                   </div>
+                  
+                  <button
+                    data-testid={`button-manual-${category.id}`}
+                    className="mt-3 w-full h-10 rounded-xl border border-slate-200 flex items-center justify-center gap-2 text-slate-600 hover:bg-slate-50 transition-colors"
+                  >
+                    <Keyboard className="w-4 h-4" />
+                    <span className="text-sm font-medium">Agregar precio manual</span>
+                  </button>
                 </motion.div>
               ))}
             </div>
