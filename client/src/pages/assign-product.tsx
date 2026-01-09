@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Search, Check, X, Plus, ChevronDown, Eye } from "lucide-react";
+import { ArrowLeft, Search, Check, X, Plus, ChevronDown, Eye, Clock, Camera, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Product {
@@ -63,6 +63,7 @@ export default function AssignProductPage() {
   const [editingPriceId, setEditingPriceId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
   const [previewImage, setPreviewImage] = useState<DetectedPrice | null>(null);
+  const [viewMode, setViewMode] = useState<"list" | "cards">("list");
 
   const totalProductsAssigned = prices.reduce((sum, p) => sum + p.assignedProducts.length, 0);
   const totalProducts = allProducts.length;
@@ -340,13 +341,125 @@ export default function AssignProductPage() {
             />
           </div>
         </div>
+
+        {/* View Mode Switcher */}
+        <div className="px-4 pb-3">
+          <select
+            value={viewMode}
+            onChange={(e) => setViewMode(e.target.value as "list" | "cards")}
+            data-testid="select-view-mode"
+            className="w-full h-10 px-3 rounded-xl bg-slate-50 border border-slate-200 text-sm font-medium text-slate-700 outline-none focus:border-primary cursor-pointer"
+          >
+            <option value="list">Vista Lista</option>
+            <option value="cards">Vista Tarjetas</option>
+          </select>
+        </div>
       </header>
 
       <main className="flex-1 px-4 py-4 pb-28">
-        <div className="bg-white rounded-2xl p-4 shadow-sm">
-          <div className="space-y-3">
-          {prices.map((priceItem, index) => {
-            const hasProducts = priceItem.assignedProducts.length > 0;
+        {viewMode === "cards" ? (
+          /* CARD VIEW */
+          <div className="space-y-4">
+            {prices.map((priceItem, index) => {
+              const hasProducts = priceItem.assignedProducts.length > 0;
+              const priceProgress = hasProducts ? (priceItem.assignedProducts.length / 5) * 100 : 0;
+              
+              return (
+                <motion.div
+                  key={priceItem.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.03 }}
+                  className="bg-white rounded-2xl p-4 shadow-sm"
+                  data-testid={`price-card-${priceItem.id}`}
+                >
+                  {/* Card Header */}
+                  <div className="flex items-start gap-3 mb-3">
+                    {/* Price Tag Image */}
+                    <div className="relative">
+                      <img
+                        src={priceItem.image}
+                        alt="Price tag"
+                        className="w-16 h-16 rounded-xl object-cover"
+                      />
+                      <button
+                        onClick={() => setPreviewImage(priceItem)}
+                        className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white shadow-md border border-slate-200 flex items-center justify-center text-primary"
+                      >
+                        <Eye className="w-3 h-3" />
+                      </button>
+                    </div>
+                    
+                    {/* Price Info */}
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold text-slate-800">${priceItem.price.toFixed(2)}</h3>
+                      <p className="text-sm text-slate-500">
+                        {hasProducts ? `${priceItem.assignedProducts.length} productos` : "Sin productos"}
+                      </p>
+                    </div>
+                    
+                    {/* Status Badge */}
+                    <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium ${hasProducts ? 'bg-slate-100 text-slate-700' : 'bg-primary/10 text-primary'}`}>
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>{hasProducts ? "Asignado" : "Pendiente"}</span>
+                    </div>
+                  </div>
+                  
+                  {/* Progress Bar */}
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between mb-1">
+                      <div className="h-1.5 flex-1 bg-slate-100 rounded-full overflow-hidden mr-3">
+                        <div 
+                          className="h-full bg-primary rounded-full transition-all"
+                          style={{ width: `${Math.min(priceProgress, 100)}%` }}
+                        />
+                      </div>
+                      <span className="text-xs font-semibold text-slate-500">{Math.min(Math.round(priceProgress), 100)}%</span>
+                    </div>
+                  </div>
+                  
+                  {/* Assigned Products Preview */}
+                  {hasProducts && (
+                    <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
+                      {priceItem.assignedProducts.map((product) => (
+                        <div key={product.id} className="flex-shrink-0">
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-10 h-10 rounded-lg object-cover border-2 border-slate-200"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {/* Action Buttons */}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setPreviewImage(priceItem)}
+                      className="flex-1 flex items-center justify-center gap-2 h-11 rounded-xl border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 transition-colors"
+                    >
+                      <Eye className="w-4 h-4" />
+                      <span>Ver Foto</span>
+                    </button>
+                    <button
+                      onClick={() => setModalPriceId(priceItem.id)}
+                      className="flex-1 flex items-center justify-center gap-2 h-11 rounded-xl bg-primary text-white font-medium hover:bg-primary/90 transition-colors"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Asignar</span>
+                    </button>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        ) : (
+          /* LIST VIEW */
+          <div className="bg-white rounded-2xl p-4 shadow-sm">
+            <div className="space-y-3">
+            {prices.map((priceItem, index) => {
+              const hasProducts = priceItem.assignedProducts.length > 0;
             
             return (
               <motion.div
@@ -418,8 +531,9 @@ export default function AssignProductPage() {
               </motion.div>
             );
           })}
+            </div>
           </div>
-        </div>
+        )}
       </main>
 
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-slate-200">
