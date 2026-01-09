@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Search, Check, Pencil, X, Image, Plus, ChevronDown } from "lucide-react";
+import { ArrowLeft, Search, Check, X, Plus, ChevronDown, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Product {
@@ -343,7 +343,7 @@ export default function AssignProductPage() {
       </header>
 
       <main className="flex-1 px-4 py-4 pb-28">
-        <div className="space-y-2">
+        <div className="divide-y divide-slate-200">
           {prices.map((priceItem, index) => {
             const hasProducts = priceItem.assignedProducts.length > 0;
             
@@ -353,56 +353,26 @@ export default function AssignProductPage() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.02 }}
-                className="flex items-center gap-2"
+                className="flex items-center gap-3 py-3"
                 data-testid={`price-row-${priceItem.id}`}
               >
-                {/* Price box - separate from products box */}
+                {/* Price box - separate with light bg and dark border */}
                 <div className="relative">
-                  <div className={`w-16 h-16 rounded-xl flex items-center justify-center ${hasProducts ? 'bg-slate-700' : 'bg-primary/5 border border-slate-200'}`}>
-                    {editingPriceId === priceItem.id ? (
-                      <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
-                        <span className="text-sm font-bold text-primary">$</span>
-                        <input
-                          type="number"
-                          step="0.01"
-                          value={editValue}
-                          onChange={(e) => setEditValue(e.target.value)}
-                          data-testid={`input-price-${priceItem.id}`}
-                          autoFocus
-                          className="w-12 text-sm font-bold text-primary bg-transparent outline-none"
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") saveEditedPrice(priceItem.id);
-                            if (e.key === "Escape") setEditingPriceId(null);
-                          }}
-                          onBlur={() => saveEditedPrice(priceItem.id)}
-                        />
-                      </div>
-                    ) : (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          startEditingPrice(priceItem);
-                        }}
-                        data-testid={`button-edit-${priceItem.id}`}
-                        className="flex items-center gap-1"
-                      >
-                        <span className={`text-lg font-bold ${hasProducts ? 'text-white' : 'text-primary'}`}>
-                          ${priceItem.price.toFixed(2)}
-                        </span>
-                        <Pencil className={`w-3 h-3 ${hasProducts ? 'text-slate-400' : 'text-primary/40'}`} />
-                      </button>
-                    )}
+                  <div className="w-16 h-16 rounded-xl flex items-center justify-center bg-slate-50 border-2 border-slate-700">
+                    <span className="text-lg font-bold text-slate-700">
+                      ${priceItem.price.toFixed(2)}
+                    </span>
                   </div>
-                  {/* Photo icon in corner */}
+                  {/* Eye icon in corner */}
                   <button
                     data-testid={`button-photo-${priceItem.id}`}
                     onClick={(e) => {
                       e.stopPropagation();
                       setPreviewImage(priceItem);
                     }}
-                    className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center shadow-sm ${hasProducts ? 'bg-slate-500 text-white' : 'bg-white border border-slate-200 text-slate-500'}`}
+                    className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center bg-slate-100 border-2 border-slate-700 text-slate-700"
                   >
-                    <Image className="w-3 h-3" />
+                    <Eye className="w-3 h-3" />
                   </button>
                 </div>
 
