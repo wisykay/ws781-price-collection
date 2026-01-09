@@ -353,14 +353,14 @@ export default function AssignProductPage() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.02 }}
-                className={`rounded-xl overflow-hidden ${hasProducts ? 'bg-slate-700' : 'bg-white border border-slate-200'}`}
+                className={`rounded-xl overflow-hidden ${hasProducts ? 'bg-slate-100 border-2 border-slate-700' : 'bg-white border border-slate-200'}`}
               >
                 <div 
                   className="flex items-center gap-3 p-3 cursor-pointer"
                   onClick={() => setModalPriceId(priceItem.id)}
                   data-testid={`price-row-${priceItem.id}`}
                 >
-                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${hasProducts ? 'bg-slate-600' : 'bg-primary/5'}`}>
+                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${hasProducts ? 'bg-slate-700' : 'bg-primary/5'}`}>
                     {editingPriceId === priceItem.id ? (
                       <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
                         <span className="text-sm font-bold text-primary">$</span>
@@ -394,11 +394,11 @@ export default function AssignProductPage() {
                             key={product.id}
                             src={product.image}
                             alt={product.name}
-                            className="w-8 h-8 rounded-md object-cover border-2 border-white/30"
+                            className="w-8 h-8 rounded-md object-cover border-2 border-slate-600"
                           />
                         ))}
                         {priceItem.assignedProducts.length > 3 && (
-                          <span className="w-8 h-8 rounded-md bg-slate-600 flex items-center justify-center text-xs font-medium text-white">
+                          <span className="w-8 h-8 rounded-md bg-slate-700 flex items-center justify-center text-xs font-medium text-white">
                             +{priceItem.assignedProducts.length - 3}
                           </span>
                         )}
@@ -415,7 +415,7 @@ export default function AssignProductPage() {
                         e.stopPropagation();
                         setPreviewImage(priceItem);
                       }}
-                      className={`w-8 h-8 flex items-center justify-center rounded-lg ${hasProducts ? 'bg-slate-600 text-slate-300 hover:text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+                      className={`w-8 h-8 flex items-center justify-center rounded-lg ${hasProducts ? 'bg-slate-200 text-slate-600 hover:bg-slate-300' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
                     >
                       <Image className="w-4 h-4" />
                     </button>
@@ -426,12 +426,12 @@ export default function AssignProductPage() {
                         e.stopPropagation();
                         startEditingPrice(priceItem);
                       }}
-                      className={`w-8 h-8 flex items-center justify-center rounded-lg ${hasProducts ? 'bg-slate-600 text-slate-300 hover:text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+                      className={`w-8 h-8 flex items-center justify-center rounded-lg ${hasProducts ? 'bg-slate-200 text-slate-600 hover:bg-slate-300' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
                     >
                       <Pencil className="w-4 h-4" />
                     </button>
 
-                    <div className={`w-8 h-8 flex items-center justify-center rounded-lg ${hasProducts ? 'bg-slate-600 text-white' : 'bg-primary/10 text-primary'}`}>
+                    <div className={`w-8 h-8 flex items-center justify-center rounded-lg ${hasProducts ? 'bg-slate-700 text-white' : 'bg-primary/10 text-primary'}`}>
                       {hasProducts ? (
                         <span className="text-xs font-bold">{priceItem.assignedProducts.length}</span>
                       ) : (
