@@ -344,7 +344,7 @@ export default function AssignProductPage() {
 
       <main className="flex-1 px-4 py-4 pb-28">
         <div className="bg-white rounded-2xl p-4 shadow-sm">
-          <div className="divide-y divide-slate-100">
+          <div className="space-y-3">
           {prices.map((priceItem, index) => {
             const hasProducts = priceItem.assignedProducts.length > 0;
             
@@ -354,13 +354,13 @@ export default function AssignProductPage() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.02 }}
-                className="flex items-center gap-3 py-3"
+                className="flex items-center gap-3"
                 data-testid={`price-row-${priceItem.id}`}
               >
                 {/* Price box - separate with light bg and dark border */}
                 <div className="relative">
-                  <div className="w-16 h-16 rounded-xl flex items-center justify-center bg-slate-50 border-2 border-slate-700">
-                    <span className="text-lg font-bold text-slate-700">
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white shadow-sm border border-slate-200">
+                    <span className="text-lg font-bold text-slate-800">
                       ${priceItem.price.toFixed(2)}
                     </span>
                   </div>
@@ -371,7 +371,7 @@ export default function AssignProductPage() {
                       e.stopPropagation();
                       setPreviewImage(priceItem);
                     }}
-                    className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center bg-slate-100 border-2 border-slate-700 text-slate-700"
+                    className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center bg-white shadow-md border border-slate-200 text-primary"
                   >
                     <Eye className="w-3 h-3" />
                   </button>
@@ -379,7 +379,7 @@ export default function AssignProductPage() {
 
                 {/* Products box - unified styling */}
                 <div 
-                  className={`flex-1 flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all ${hasProducts ? 'bg-slate-700 text-white' : 'bg-primary/5 border border-primary/20 hover:bg-primary/10'}`}
+                  className={`flex-1 flex items-center gap-3 p-3 rounded-2xl cursor-pointer transition-all ${hasProducts ? 'bg-primary text-white shadow-md' : 'bg-primary/5 border border-primary/20 hover:bg-primary/10'}`}
                   onClick={() => setModalPriceId(priceItem.id)}
                 >
                   {/* Products area */}
@@ -391,11 +391,11 @@ export default function AssignProductPage() {
                             key={product.id}
                             src={product.image}
                             alt={product.name}
-                            className="w-9 h-9 rounded-lg object-cover border-2 border-white/30"
+                            className="w-9 h-9 rounded-xl object-cover border-2 border-white/40 shadow-sm"
                           />
                         ))}
                         {priceItem.assignedProducts.length > 3 && (
-                          <span className="w-9 h-9 rounded-lg bg-slate-600 flex items-center justify-center text-sm font-medium text-white/80">
+                          <span className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-sm font-medium text-white">
                             ...
                           </span>
                         )}
@@ -406,7 +406,7 @@ export default function AssignProductPage() {
                   </div>
 
                   {/* Count badge + chevron */}
-                  <div className={`flex items-center gap-1 px-2 py-1 rounded-lg ${hasProducts ? 'bg-slate-600 text-white' : 'bg-primary/10 text-primary'}`}>
+                  <div className={`flex items-center gap-1 px-3 py-1.5 rounded-full ${hasProducts ? 'bg-white/20 text-white' : 'bg-primary/10 text-primary'}`}>
                     {hasProducts ? (
                       <span className="text-sm font-bold">{priceItem.assignedProducts.length}</span>
                     ) : (
