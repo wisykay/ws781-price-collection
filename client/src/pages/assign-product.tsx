@@ -370,64 +370,73 @@ export default function AssignProductPage() {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.03 }}
-                  className="bg-white rounded-2xl p-4 shadow-sm"
+                  className={`rounded-2xl overflow-hidden ${hasProducts ? 'bg-slate-700' : 'bg-white shadow-sm border border-slate-100'}`}
                   data-testid={`price-card-${priceItem.id}`}
                 >
-                  {/* Card Header */}
-                  <div className="flex items-start gap-3 mb-3">
-                    {/* Price Tag Image */}
-                    <img
-                      src={priceItem.image}
-                      alt="Price tag"
-                      className="w-16 h-16 rounded-xl object-cover"
-                    />
+                  {/* Card Top - Price Display */}
+                  <div className={`flex items-center gap-4 p-4 ${hasProducts ? '' : 'border-b border-slate-100'}`}>
+                    {/* Large Price */}
+                    <div className={`w-20 h-20 rounded-2xl flex items-center justify-center ${hasProducts ? 'bg-slate-600' : 'bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200'}`}>
+                      <span className={`text-2xl font-bold ${hasProducts ? 'text-white' : 'text-slate-800'}`}>
+                        ${priceItem.price.toFixed(2)}
+                      </span>
+                    </div>
                     
-                    {/* Price Info */}
+                    {/* Info & Status */}
                     <div className="flex-1">
-                      <h3 className="text-xl font-bold text-slate-800">${priceItem.price.toFixed(2)}</h3>
-                      <p className="text-sm text-slate-500">
-                        {hasProducts ? `${priceItem.assignedProducts.length} productos` : "Sin productos"}
+                      <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold mb-2 ${hasProducts ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-100 text-amber-700'}`}>
+                        <div className={`w-1.5 h-1.5 rounded-full ${hasProducts ? 'bg-emerald-400' : 'bg-amber-500'}`} />
+                        {hasProducts ? "Completado" : "Pendiente"}
+                      </div>
+                      <p className={`text-sm ${hasProducts ? 'text-slate-300' : 'text-slate-500'}`}>
+                        {hasProducts ? `${priceItem.assignedProducts.length} productos asignados` : "Esperando asignación"}
                       </p>
                     </div>
                     
-                    {/* Status Badge */}
-                    <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium ${hasProducts ? 'bg-slate-100 text-slate-700' : 'bg-primary/10 text-primary'}`}>
-                      <Clock className="w-3.5 h-3.5" />
-                      <span>{hasProducts ? "Asignado" : "Pendiente"}</span>
-                    </div>
+                    {/* Price Tag Thumbnail */}
+                    <img
+                      src={priceItem.image}
+                      alt="Price tag"
+                      className="w-12 h-12 rounded-lg object-cover opacity-80"
+                    />
                   </div>
                   
-                                    
-                  {/* Assigned Products Preview */}
+                  {/* Assigned Products Strip */}
                   {hasProducts && (
-                    <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
-                      {priceItem.assignedProducts.map((product) => (
-                        <div key={product.id} className="flex-shrink-0">
+                    <div className="px-4 pb-3">
+                      <div className="flex items-center gap-1.5">
+                        {priceItem.assignedProducts.slice(0, 5).map((product) => (
                           <img
+                            key={product.id}
                             src={product.image}
                             alt={product.name}
-                            className="w-10 h-10 rounded-lg object-cover border-2 border-slate-200"
+                            className="w-8 h-8 rounded-lg object-cover border-2 border-slate-500"
                           />
-                        </div>
-                      ))}
+                        ))}
+                        {priceItem.assignedProducts.length > 5 && (
+                          <span className="w-8 h-8 rounded-lg bg-slate-500 flex items-center justify-center text-xs font-medium text-white">
+                            +{priceItem.assignedProducts.length - 5}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   )}
                   
                   {/* Action Buttons */}
-                  <div className="flex gap-2">
+                  <div className={`flex gap-2 p-3 ${hasProducts ? 'bg-slate-800/50' : 'bg-slate-50'}`}>
                     <button
                       onClick={() => setPreviewImage(priceItem)}
-                      className="flex-1 flex items-center justify-center gap-2 h-11 rounded-xl border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 transition-colors"
+                      className={`flex-1 flex items-center justify-center gap-2 h-10 rounded-xl text-sm font-medium transition-colors ${hasProducts ? 'bg-slate-600 text-white hover:bg-slate-500' : 'border border-slate-300 text-slate-600 hover:bg-white'}`}
                     >
-                      <Pencil className="w-4 h-4" />
-                      <span>Actualizar Precio</span>
+                      <Pencil className="w-3.5 h-3.5" />
+                      <span>Editar</span>
                     </button>
                     <button
                       onClick={() => setModalPriceId(priceItem.id)}
-                      className="flex-1 flex items-center justify-center gap-2 h-11 rounded-xl bg-primary text-white font-medium hover:bg-primary/90 transition-colors"
+                      className={`flex-1 flex items-center justify-center gap-2 h-10 rounded-xl text-sm font-medium transition-colors ${hasProducts ? 'bg-white text-slate-700 hover:bg-slate-100' : 'bg-primary text-white hover:bg-primary/90'}`}
                     >
-                      <Plus className="w-4 h-4" />
-                      <span>Asignar</span>
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>{hasProducts ? 'Modificar' : 'Asignar'}</span>
                     </button>
                   </div>
                 </motion.div>
