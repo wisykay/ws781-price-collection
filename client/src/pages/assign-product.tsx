@@ -379,7 +379,7 @@ export default function AssignProductPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.03 }}
                   className={`rounded-2xl overflow-hidden ${hasProducts 
-                    ? (darkMode ? 'bg-slate-700' : 'bg-slate-100 border-2 border-slate-300') 
+                    ? (darkMode ? 'bg-slate-700' : 'bg-slate-100 border-2 border-slate-300 shadow-md') 
                     : (darkMode ? 'bg-slate-800 border border-slate-700' : 'bg-white shadow-sm border border-slate-100')}`}
                   data-testid={`price-card-${priceItem.id}`}
                 >
@@ -418,7 +418,7 @@ export default function AssignProductPage() {
                             key={product.id}
                             src={product.image}
                             alt={product.name}
-                            className={`w-8 h-8 rounded-lg object-cover border-2 ${darkMode ? 'border-slate-500' : 'border-slate-200'}`}
+                            className={`w-10 h-10 rounded-sm object-cover border-2 ${darkMode ? 'border-slate-500' : 'border-slate-200'}`}
                           />
                         ))}
                         {priceItem.assignedProducts.length > 5 && (
@@ -439,7 +439,7 @@ export default function AssignProductPage() {
                         : (darkMode ? 'bg-slate-600 text-white hover:bg-slate-500' : 'border border-slate-300 text-slate-600 hover:bg-white')}`}
                     >
                       <Pencil className="w-3.5 h-3.5" />
-                      <span>Editar</span>
+                      <span>Editar Precio</span>
                     </button>
                     <button
                       onClick={() => setModalPriceId(priceItem.id)}
