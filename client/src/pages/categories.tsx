@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ChevronDown, ArrowRight } from "lucide-react";
+import { ArrowLeft, ChevronDown, ArrowRight, Pencil, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Category {
@@ -173,7 +173,7 @@ export default function CategoriesPage() {
               <p className="text-slate-500">Selecciona una categoría para continuar</p>
             </div>
             
-            <div className="space-y-6">
+            <div className="space-y-3">
               {categories.map((category, index) => (
                 <motion.div
                   key={category.id}
@@ -181,38 +181,35 @@ export default function CategoriesPage() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                   data-testid={`card-category-${category.id}`}
-                  className="flex flex-col"
+                  className="flex items-center gap-4 bg-white rounded-2xl p-3 shadow-sm border border-slate-100"
                 >
-                  <div className="flex items-center gap-5 mb-3">
-                    <div className="w-20 h-20 rounded-full bg-slate-200 flex items-center justify-center overflow-hidden flex-shrink-0">
-                      <img
-                        src={category.image}
-                        alt={category.name}
-                        className="w-14 h-14 object-cover rounded-lg"
-                      />
-                    </div>
-                    
-                    <div className="text-left">
-                      <h3 className="text-lg font-semibold text-slate-900">{category.name}</h3>
-                    </div>
+                  <div className="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <img
+                      src={category.image}
+                      alt={category.name}
+                      className="w-10 h-10 object-cover rounded-lg"
+                    />
                   </div>
                   
-                  <div className="flex gap-2 pl-1">
-                    <Button
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-base font-semibold text-slate-900">{category.name}</h3>
+                    <p className="text-xs text-slate-400 uppercase tracking-wide">7/18 productos</p>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <button
+                      data-testid={`button-manual-${category.id}`}
+                      className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 transition-colors"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                    <button
                       data-testid={`button-capture-${category.id}`}
                       onClick={() => navigate("/camera")}
-                      className="flex-1 h-11 rounded-2xl bg-primary hover:bg-primary/90 font-semibold"
+                      className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white hover:bg-primary/90 transition-colors"
                     >
-                      Agregar fotos
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      data-testid={`button-manual-${category.id}`}
-                      className="flex-1 h-11 rounded-2xl border-slate-200 text-slate-700 hover:bg-slate-50 font-medium"
-                    >
-                      Carga manual
-                    </Button>
+                      <Camera className="w-4 h-4" />
+                    </button>
                   </div>
                 </motion.div>
               ))}
