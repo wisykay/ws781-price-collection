@@ -330,9 +330,12 @@ export default function AssignProductPage() {
         </div>
         
         <div className="px-4 pb-3">
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs text-slate-500">{totalProductsAssigned} de {totalProducts} productos</span>
-            <span className="text-xs font-semibold text-primary">{Math.round(progress)}%</span>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-primary/10 rounded-lg">
+              <span className="text-sm">💵</span>
+              <span className="text-xs font-semibold text-primary">USD</span>
+            </div>
+            <span className="text-xs text-slate-500">{totalProductsAssigned}/{totalProducts} productos · {Math.round(progress)}%</span>
           </div>
           <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
             <motion.div

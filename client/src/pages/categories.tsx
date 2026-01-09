@@ -76,13 +76,17 @@ export default function CategoriesPage() {
         </div>
 
         <div className="relative mb-6">
+          <p className="text-xs font-medium text-slate-500 mb-2 ml-1">Moneda para captura de precios</p>
           <button
             data-testid="button-currency-selector"
             onClick={() => setCurrencyOpen(!currencyOpen)}
-            className="w-full flex items-center justify-between px-4 py-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm transition-all hover:border-primary/30"
+            className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-2xl border-2 border-primary/20 shadow-sm transition-all hover:border-primary/40"
           >
-            <span className="font-medium text-slate-700">{selectedCurrency}</span>
-            <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${currencyOpen ? "rotate-180" : ""}`} />
+            <div className="flex items-center gap-2">
+              <span className="text-lg">💵</span>
+              <span className="font-semibold text-slate-800">{selectedCurrency}</span>
+            </div>
+            <ChevronDown className={`w-5 h-5 text-primary transition-transform ${currencyOpen ? "rotate-180" : ""}`} />
           </button>
           
           <AnimatePresence>
