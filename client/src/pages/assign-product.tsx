@@ -379,8 +379,8 @@ export default function AssignProductPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.03 }}
                   className={`rounded-2xl overflow-hidden ${hasProducts 
-                    ? (darkMode ? 'bg-slate-700' : 'bg-slate-100 border border-slate-300 shadow-sm') 
-                    : (darkMode ? 'bg-slate-800 border border-slate-700' : 'bg-white shadow-sm border border-slate-100')}`}
+                    ? (darkMode ? 'bg-slate-700' : 'bg-slate-100 border border-slate-300 card-shadow') 
+                    : (darkMode ? 'bg-slate-800 border border-slate-700' : 'bg-white card-shadow border border-slate-100')}`}
                   data-testid={`price-card-${priceItem.id}`}
                 >
                   {/* Card Top - Price Display */}
