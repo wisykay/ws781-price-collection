@@ -389,7 +389,7 @@ export default function AssignProductPage() {
                   <div className="flex-1 min-w-0">
                     {hasProducts ? (
                       <div className="flex items-center gap-1">
-                        {priceItem.assignedProducts.slice(0, 4).map((product) => (
+                        {priceItem.assignedProducts.slice(0, 3).map((product) => (
                           <img
                             key={product.id}
                             src={product.image}
@@ -397,9 +397,9 @@ export default function AssignProductPage() {
                             className="w-8 h-8 rounded-md object-cover border-2 border-emerald-300"
                           />
                         ))}
-                        {priceItem.assignedProducts.length > 4 && (
+                        {priceItem.assignedProducts.length > 3 && (
                           <span className="w-8 h-8 rounded-md bg-slate-100 flex items-center justify-center text-xs font-medium text-slate-600">
-                            +{priceItem.assignedProducts.length - 4}
+                            +{priceItem.assignedProducts.length - 3}
                           </span>
                         )}
                       </div>
