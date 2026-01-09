@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ChevronDown, ArrowRight, Pencil, Camera } from "lucide-react";
+import { ArrowLeft, ChevronDown, ArrowRight, Keyboard, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Category {
@@ -199,9 +199,10 @@ export default function CategoriesPage() {
                   <div className="flex items-center gap-2">
                     <button
                       data-testid={`button-manual-${category.id}`}
-                      className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 transition-colors"
+                      className="h-10 px-3 rounded-xl border border-slate-200 flex items-center justify-center gap-1.5 text-slate-600 hover:bg-slate-50 transition-colors"
                     >
-                      <Pencil className="w-4 h-4" />
+                      <Keyboard className="w-4 h-4" />
+                      <span className="text-xs font-medium">Manual</span>
                     </button>
                     <button
                       data-testid={`button-capture-${category.id}`}
