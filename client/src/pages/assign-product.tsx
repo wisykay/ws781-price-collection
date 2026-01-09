@@ -234,7 +234,7 @@ export default function AssignProductPage() {
                     {modalPrice.assignedProducts.map((product) => (
                       <div
                         key={product.id}
-                        className="flex items-center gap-3 p-2 bg-slate-700 rounded-xl"
+                        className="flex items-center gap-3 p-2 bg-slate-500 rounded-xl border border-slate-600"
                       >
                         <img
                           src={product.image}
@@ -248,7 +248,7 @@ export default function AssignProductPage() {
                         <button
                           data-testid={`button-remove-modal-${product.id}`}
                           onClick={() => removeProductFromPrice(modalPrice.id, product.id)}
-                          className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-600 text-slate-300 hover:text-white"
+                          className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-400 text-white hover:bg-slate-300"
                         >
                           <X className="w-4 h-4" />
                         </button>
@@ -379,7 +379,7 @@ export default function AssignProductPage() {
 
                 {/* Products box - unified styling */}
                 <div 
-                  className={`flex-1 flex items-center gap-3 p-3 rounded-2xl cursor-pointer transition-all ${hasProducts ? 'bg-primary text-white shadow-md' : 'bg-primary/5 border border-primary/20 hover:bg-primary/10'}`}
+                  className={`flex-1 flex items-center gap-3 p-3 rounded-2xl cursor-pointer transition-all ${hasProducts ? 'bg-slate-600 text-white shadow-md border border-slate-700' : 'bg-slate-50 border border-slate-200 hover:bg-slate-100'}`}
                   onClick={() => setModalPriceId(priceItem.id)}
                 >
                   {/* Products area */}
@@ -395,18 +395,18 @@ export default function AssignProductPage() {
                           />
                         ))}
                         {priceItem.assignedProducts.length > 3 && (
-                          <span className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-sm font-medium text-white">
+                          <span className="w-9 h-9 rounded-xl bg-slate-500 flex items-center justify-center text-sm font-medium text-white">
                             ...
                           </span>
                         )}
                       </div>
                     ) : (
-                      <p className="text-sm text-primary font-medium">Toca para asignar productos</p>
+                      <p className="text-sm text-slate-500">Toca para asignar productos</p>
                     )}
                   </div>
 
                   {/* Count badge + chevron */}
-                  <div className={`flex items-center gap-1 px-3 py-1.5 rounded-full ${hasProducts ? 'bg-white/20 text-white' : 'bg-primary/10 text-primary'}`}>
+                  <div className={`flex items-center gap-1 px-3 py-1.5 rounded-full ${hasProducts ? 'bg-slate-500 text-white' : 'bg-slate-200 text-slate-500'}`}>
                     {hasProducts ? (
                       <span className="text-sm font-bold">{priceItem.assignedProducts.length}</span>
                     ) : (
