@@ -379,35 +379,25 @@ export default function AssignProductPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.03 }}
                   className={`rounded-2xl overflow-hidden ${hasProducts 
-                    ? (darkMode ? 'bg-slate-700' : 'bg-slate-200 border border-slate-300') 
+                    ? (darkMode ? 'bg-slate-700' : 'bg-slate-50 border border-slate-200') 
                     : (darkMode ? 'bg-slate-800 border border-slate-700' : 'bg-white shadow-sm border border-slate-100')}`}
                   data-testid={`price-card-${priceItem.id}`}
                 >
                   {/* Card Top - Price Display */}
                   <div className={`flex items-center gap-4 p-4 ${hasProducts ? '' : 'border-b border-slate-100'}`}>
                     {/* Large Price */}
-                    <div className={`w-20 h-20 rounded-2xl flex items-center justify-center ${hasProducts 
-                      ? (darkMode ? 'bg-slate-600' : 'bg-slate-400') 
-                      : (darkMode ? 'bg-slate-700 border border-slate-600' : 'bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200')}`}>
-                      <span className={`text-2xl font-bold ${hasProducts 
-                        ? 'text-white' 
-                        : (darkMode ? 'text-white' : 'text-slate-800')}`}>
+                    <div className={`w-20 h-20 rounded-2xl flex items-center justify-center ${darkMode 
+                      ? 'bg-slate-700 border border-slate-600' 
+                      : 'bg-white border border-slate-200'}`}>
+                      <span className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-primary'}`}>
                         ${priceItem.price.toFixed(2)}
                       </span>
                     </div>
                     
-                    {/* Info & Status */}
+                    {/* Info */}
                     <div className="flex-1">
-                      <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold mb-2 ${hasProducts 
-                        ? (darkMode ? 'bg-emerald-500/20 text-emerald-300' : 'bg-emerald-100 text-emerald-700') 
-                        : (darkMode ? 'bg-amber-500/20 text-amber-300' : 'bg-amber-100 text-amber-700')}`}>
-                        <div className={`w-1.5 h-1.5 rounded-full ${hasProducts ? 'bg-emerald-400' : 'bg-amber-500'}`} />
-                        {hasProducts ? "Completado" : "Pendiente"}
-                      </div>
-                      <p className={`text-sm ${hasProducts 
-                        ? (darkMode ? 'text-slate-300' : 'text-slate-600') 
-                        : (darkMode ? 'text-slate-400' : 'text-slate-500')}`}>
-                        {hasProducts ? `${priceItem.assignedProducts.length} productos asignados` : "Esperando asignación"}
+                      <p className={`text-sm ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+                        {hasProducts ? `${priceItem.assignedProducts.length} productos asignados` : "Sin productos asignados"}
                       </p>
                     </div>
                     
@@ -428,7 +418,7 @@ export default function AssignProductPage() {
                             key={product.id}
                             src={product.image}
                             alt={product.name}
-                            className={`w-8 h-8 rounded-lg object-cover border-2 ${darkMode ? 'border-slate-500' : 'border-slate-300'}`}
+                            className={`w-8 h-8 rounded-lg object-cover border-2 ${darkMode ? 'border-slate-500' : 'border-slate-200'}`}
                           />
                         ))}
                         {priceItem.assignedProducts.length > 5 && (
@@ -441,9 +431,7 @@ export default function AssignProductPage() {
                   )}
                   
                   {/* Action Buttons */}
-                  <div className={`flex gap-2 p-3 ${hasProducts 
-                    ? (darkMode ? 'bg-slate-800/50' : 'bg-slate-300/50') 
-                    : (darkMode ? 'bg-slate-700/50' : 'bg-slate-50')}`}>
+                  <div className={`flex gap-2 p-3 ${darkMode ? 'bg-slate-800/50' : 'bg-slate-100/50'}`}>
                     <button
                       onClick={() => setPreviewImage(priceItem)}
                       className={`flex-1 flex items-center justify-center gap-2 h-10 rounded-xl text-sm font-medium transition-colors ${hasProducts 
