@@ -173,52 +173,48 @@ export default function CategoriesPage() {
               <p className="text-slate-500">Selecciona una categoría para continuar</p>
             </div>
             
-            <div className="space-y-3">
+            <div className="space-y-4">
               {categories.map((category, index) => (
                 <motion.div
                   key={category.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.08 }}
                   data-testid={`card-category-${category.id}`}
-                  className="flex items-center gap-4 bg-white rounded-2xl p-3 shadow-sm border border-slate-100"
+                  className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100"
                 >
-                  <div className="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden flex-shrink-0">
-                    <img
-                      src={category.image}
-                      alt={category.name}
-                      className="w-10 h-10 object-cover rounded-lg"
-                    />
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                      <img
+                        src={category.image}
+                        alt={category.name}
+                        className="w-8 h-8 object-cover rounded-md"
+                      />
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
                       <h3 className="text-base font-semibold text-slate-900">{category.name}</h3>
-                      <span className="text-xs text-slate-400">7/18</span>
+                      <p className="text-sm text-slate-400">7 de 18 productos</p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-primary rounded-full" style={{ width: '39%' }} />
-                      </div>
-                      <span className="text-xs font-medium text-primary">39%</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-2">
-                    <button
-                      data-testid={`button-manual-${category.id}`}
-                      className="h-9 px-3 rounded-xl border border-slate-200 flex items-center justify-center gap-1.5 text-slate-500 hover:bg-slate-50 transition-colors"
-                    >
-                      <Keyboard className="w-3.5 h-3.5" />
-                      <span className="text-xs font-medium">Manual</span>
-                    </button>
+                    
                     <button
                       data-testid={`button-capture-${category.id}`}
                       onClick={() => navigate("/camera")}
-                      className="h-9 px-3 rounded-xl bg-primary flex items-center justify-center gap-1.5 text-white hover:bg-primary/90 transition-colors"
+                      className="w-11 h-11 rounded-xl bg-primary flex items-center justify-center text-white hover:bg-primary/90 transition-colors"
                     >
-                      <Camera className="w-3.5 h-3.5" />
-                      <span className="text-xs font-medium">Fotos</span>
+                      <Camera className="w-5 h-5" />
+                    </button>
+                  </div>
+                  
+                  <div className="mt-3 flex items-center gap-3">
+                    <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                      <div className="h-full bg-primary rounded-full" style={{ width: '39%' }} />
+                    </div>
+                    <button
+                      data-testid={`button-manual-${category.id}`}
+                      className="text-xs text-slate-400 hover:text-primary transition-colors"
+                    >
+                      + Manual
                     </button>
                   </div>
                 </motion.div>
