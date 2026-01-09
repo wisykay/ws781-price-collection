@@ -379,7 +379,7 @@ export default function AssignProductPage() {
 
                 {/* Products box - unified styling */}
                 <div 
-                  className={`flex-1 flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all ${hasProducts ? 'bg-slate-700 text-white' : 'bg-slate-50 hover:bg-slate-100'}`}
+                  className={`flex-1 flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all ${hasProducts ? 'bg-slate-700 text-white' : 'bg-primary/5 border border-primary/20 hover:bg-primary/10'}`}
                   onClick={() => setModalPriceId(priceItem.id)}
                 >
                   {/* Products area */}
@@ -406,7 +406,7 @@ export default function AssignProductPage() {
                   </div>
 
                   {/* Count badge + chevron */}
-                  <div className={`flex items-center gap-1 px-2 py-1 rounded-lg ${hasProducts ? 'bg-slate-600 text-white' : 'bg-slate-200 text-slate-600'}`}>
+                  <div className={`flex items-center gap-1 px-2 py-1 rounded-lg ${hasProducts ? 'bg-slate-600 text-white' : 'bg-primary/10 text-primary'}`}>
                     {hasProducts ? (
                       <span className="text-sm font-bold">{priceItem.assignedProducts.length}</span>
                     ) : (
