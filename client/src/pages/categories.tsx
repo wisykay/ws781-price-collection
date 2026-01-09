@@ -192,24 +192,33 @@ export default function CategoriesPage() {
                   </div>
                   
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-base font-semibold text-slate-900">{category.name}</h3>
-                    <p className="text-xs text-slate-400 uppercase tracking-wide">7/18 productos</p>
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <h3 className="text-base font-semibold text-slate-900">{category.name}</h3>
+                      <span className="text-xs text-slate-400">7/18</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-primary rounded-full" style={{ width: '39%' }} />
+                      </div>
+                      <span className="text-xs font-medium text-primary">39%</span>
+                    </div>
                   </div>
                   
                   <div className="flex items-center gap-2">
                     <button
                       data-testid={`button-manual-${category.id}`}
-                      className="h-10 px-3 rounded-xl border border-slate-200 flex items-center justify-center gap-1.5 text-slate-600 hover:bg-slate-50 transition-colors"
+                      className="h-9 px-3 rounded-xl border border-slate-200 flex items-center justify-center gap-1.5 text-slate-500 hover:bg-slate-50 transition-colors"
                     >
-                      <Keyboard className="w-4 h-4" />
+                      <Keyboard className="w-3.5 h-3.5" />
                       <span className="text-xs font-medium">Manual</span>
                     </button>
                     <button
                       data-testid={`button-capture-${category.id}`}
                       onClick={() => navigate("/camera")}
-                      className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white hover:bg-primary/90 transition-colors"
+                      className="h-9 px-3 rounded-xl bg-primary flex items-center justify-center gap-1.5 text-white hover:bg-primary/90 transition-colors"
                     >
-                      <Camera className="w-4 h-4" />
+                      <Camera className="w-3.5 h-3.5" />
+                      <span className="text-xs font-medium">Fotos</span>
                     </button>
                   </div>
                 </motion.div>
