@@ -43,16 +43,17 @@ const allProducts: Product[] = [
 ];
 
 const initialPrices: DetectedPrice[] = [
-  { id: "1", image: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=800&h=800&fit=crop", price: 1.01, assignedProducts: [] },
-  { id: "2", image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&h=800&fit=crop", price: 0.98, assignedProducts: [] },
-  { id: "3", image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=800&fit=crop", price: 2.50, assignedProducts: [] },
-  { id: "4", image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=800&h=800&fit=crop", price: 1.75, assignedProducts: [] },
-  { id: "5", image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&h=800&fit=crop", price: 3.25, assignedProducts: [] },
-  { id: "6", image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&h=800&fit=crop", price: 2.15, assignedProducts: [] },
-  { id: "7", image: "https://images.unsplash.com/photo-1553531384-cc64ac80f931?w=800&h=800&fit=crop", price: 0.85, assignedProducts: [] },
-  { id: "8", image: "https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?w=800&h=800&fit=crop", price: 1.95, assignedProducts: [] },
-  { id: "9", image: "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=800&h=800&fit=crop", price: 4.50, assignedProducts: [] },
-  { id: "10", image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=800&fit=crop", price: 2.80, assignedProducts: [] },
+  { id: "1", image: "/attached_assets/image_1767940330318.png", price: 16.20, assignedProducts: [] },
+  { id: "2", image: "/attached_assets/image_1767940340771.png", price: 4.50, assignedProducts: [] },
+  { id: "3", image: "/attached_assets/image_1767940349913.png", price: 2.85, assignedProducts: [] },
+  { id: "4", image: "/attached_assets/image_1767940357463.png", price: 2.20, assignedProducts: [] },
+  { id: "5", image: "/attached_assets/image_1767940363396.png", price: 1.40, assignedProducts: [] },
+  { id: "6", image: "/attached_assets/image_1767940370290.png", price: 0.80, assignedProducts: [] },
+  { id: "7", image: "/attached_assets/image_1767940378950.png", price: 1.60, assignedProducts: [] },
+  { id: "8", image: "/attached_assets/image_1767940385862.png", price: 1.50, assignedProducts: [] },
+  { id: "9", image: "/attached_assets/image_1767940392730.png", price: 0.70, assignedProducts: [] },
+  { id: "10", image: "/attached_assets/image_1767940406076.png", price: 224.84, assignedProducts: [] },
+  { id: "11", image: "/attached_assets/image_1767940418028.png", price: 0.93, assignedProducts: [] },
 ];
 
 export default function AssignProductPage() {
@@ -397,7 +398,7 @@ export default function AssignProductPage() {
                     {/* Info */}
                     <div className="flex-1">
                       <p className={`text-sm ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-                        {hasProducts ? `${priceItem.assignedProducts.length} productos asignados` : "Sin productos asignados"}
+                        {hasProducts ? `${priceItem.assignedProducts.length} productos asignados` : "Tocar a asignar"}
                       </p>
                     </div>
                     
