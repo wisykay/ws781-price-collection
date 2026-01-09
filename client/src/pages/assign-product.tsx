@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Search, Check, X, Plus, Pencil, Settings2, ChevronDown } from "lucide-react";
+import { ArrowLeft, Search, Check, X, Plus, Pencil, Settings2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Product {
@@ -64,11 +64,7 @@ export default function AssignProductPage() {
   const [editingPriceId, setEditingPriceId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
   const [previewImage, setPreviewImage] = useState<DetectedPrice | null>(null);
-  const [selectedCurrency, setSelectedCurrency] = useState("USD - Dólar");
-  const [currencyOpen, setCurrencyOpen] = useState(false);
-  
-  const currencies = ["USD - Dólar", "EUR - Euro", "VES - Bolívar"];
-  
+    
   const totalProductsAssigned = prices.reduce((sum, p) => sum + p.assignedProducts.length, 0);
   const totalProducts = allProducts.length;
   const progress = (totalProductsAssigned / totalProducts) * 100;
@@ -335,42 +331,12 @@ export default function AssignProductPage() {
         
         <div className="px-4 pb-3">
           <div className="flex items-center justify-between mb-2">
-            <button
-              onClick={() => setCurrencyOpen(!currencyOpen)}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors"
-            >
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 rounded-lg">
               <span className="text-sm">💵</span>
-              <span className="text-xs font-semibold text-primary">{selectedCurrency.split(' ')[0]}</span>
-              <ChevronDown className={`w-3 h-3 text-primary transition-transform ${currencyOpen ? "rotate-180" : ""}`} />
-            </button>
+              <span className="text-xs font-medium text-slate-600">USD - Dólar</span>
+            </div>
             <span className="text-xs text-slate-500">{totalProductsAssigned}/{totalProducts} productos · {Math.round(progress)}%</span>
           </div>
-          
-          <AnimatePresence>
-            {currencyOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                className="mb-2 bg-white rounded-xl border border-slate-200 shadow-lg overflow-hidden"
-              >
-                {currencies.map((currency) => (
-                  <button
-                    key={currency}
-                    onClick={() => {
-                      setSelectedCurrency(currency);
-                      setCurrencyOpen(false);
-                    }}
-                    className={`w-full px-4 py-2.5 text-left text-sm hover:bg-slate-50 transition-colors ${
-                      currency === selectedCurrency ? "bg-primary/5 text-primary font-medium" : "text-slate-700"
-                    }`}
-                  >
-                    {currency}
-                  </button>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
           
           <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
             <motion.div
