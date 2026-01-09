@@ -353,66 +353,64 @@ export default function AssignProductPage() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.02 }}
-                className={`rounded-xl overflow-hidden ${hasProducts ? 'bg-slate-100 border-2 border-slate-700' : 'bg-white border border-slate-200'}`}
+                className="flex items-center gap-2"
+                data-testid={`price-row-${priceItem.id}`}
               >
-                <div 
-                  className="flex items-center gap-3 p-3 cursor-pointer"
-                  onClick={() => setModalPriceId(priceItem.id)}
-                  data-testid={`price-row-${priceItem.id}`}
-                >
-                  {/* Price box with photo icon overlay */}
-                  <div className="relative group">
-                    <div className={`w-16 h-16 rounded-xl flex items-center justify-center ${hasProducts ? 'bg-slate-700' : 'bg-primary/5'}`}>
-                      {editingPriceId === priceItem.id ? (
-                        <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
-                          <span className="text-sm font-bold text-primary">$</span>
-                          <input
-                            type="number"
-                            step="0.01"
-                            value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
-                            data-testid={`input-price-${priceItem.id}`}
-                            autoFocus
-                            className="w-12 text-sm font-bold text-primary bg-transparent outline-none"
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter") saveEditedPrice(priceItem.id);
-                              if (e.key === "Escape") setEditingPriceId(null);
-                            }}
-                            onBlur={() => saveEditedPrice(priceItem.id)}
-                          />
-                        </div>
-                      ) : (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            startEditingPrice(priceItem);
+                {/* Price box - separate from products box */}
+                <div className="relative">
+                  <div className={`w-16 h-16 rounded-xl flex items-center justify-center ${hasProducts ? 'bg-slate-700' : 'bg-primary/5 border border-slate-200'}`}>
+                    {editingPriceId === priceItem.id ? (
+                      <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
+                        <span className="text-sm font-bold text-primary">$</span>
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          data-testid={`input-price-${priceItem.id}`}
+                          autoFocus
+                          className="w-12 text-sm font-bold text-primary bg-transparent outline-none"
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") saveEditedPrice(priceItem.id);
+                            if (e.key === "Escape") setEditingPriceId(null);
                           }}
-                          data-testid={`button-edit-${priceItem.id}`}
-                          className="flex items-center gap-1"
-                        >
-                          <span className={`text-lg font-bold ${hasProducts ? 'text-white' : 'text-primary'}`}>
-                            ${priceItem.price.toFixed(2)}
-                          </span>
-                          <Pencil className={`w-3 h-3 ${hasProducts ? 'text-slate-400' : 'text-primary/40'}`} />
-                        </button>
-                      )}
-                    </div>
-                    {/* Photo icon in corner */}
-                    <button
-                      data-testid={`button-photo-${priceItem.id}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setPreviewImage(priceItem);
-                      }}
-                      className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center shadow-sm ${hasProducts ? 'bg-slate-600 text-white' : 'bg-white border border-slate-200 text-slate-500'}`}
-                    >
-                      <Image className="w-3 h-3" />
-                    </button>
+                          onBlur={() => saveEditedPrice(priceItem.id)}
+                        />
+                      </div>
+                    ) : (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          startEditingPrice(priceItem);
+                        }}
+                        data-testid={`button-edit-${priceItem.id}`}
+                        className="flex items-center gap-1"
+                      >
+                        <span className={`text-lg font-bold ${hasProducts ? 'text-white' : 'text-primary'}`}>
+                          ${priceItem.price.toFixed(2)}
+                        </span>
+                        <Pencil className={`w-3 h-3 ${hasProducts ? 'text-slate-400' : 'text-primary/40'}`} />
+                      </button>
+                    )}
                   </div>
+                  {/* Photo icon in corner */}
+                  <button
+                    data-testid={`button-photo-${priceItem.id}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setPreviewImage(priceItem);
+                    }}
+                    className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center shadow-sm ${hasProducts ? 'bg-slate-500 text-white' : 'bg-white border border-slate-200 text-slate-500'}`}
+                  >
+                    <Image className="w-3 h-3" />
+                  </button>
+                </div>
 
-                  {/* Separator */}
-                  <div className={`w-px h-10 ${hasProducts ? 'bg-slate-500' : 'bg-slate-200'}`} />
-
+                {/* Products box - separate container */}
+                <div 
+                  className={`flex-1 flex items-center gap-3 p-3 rounded-xl cursor-pointer ${hasProducts ? 'bg-slate-100 border-2 border-slate-700' : 'bg-white border border-slate-200'}`}
+                  onClick={() => setModalPriceId(priceItem.id)}
+                >
                   {/* Products area */}
                   <div className="flex-1 min-w-0">
                     {hasProducts ? (
@@ -436,8 +434,8 @@ export default function AssignProductPage() {
                     )}
                   </div>
 
-                  {/* Count + chevron at end */}
-                  <div className={`flex items-center gap-1 ${hasProducts ? 'text-white' : 'text-primary'}`}>
+                  {/* Count badge + chevron */}
+                  <div className={`flex items-center gap-1 px-2 py-1 rounded-lg ${hasProducts ? 'bg-slate-700 text-white' : 'bg-primary/10 text-primary'}`}>
                     {hasProducts ? (
                       <span className="text-sm font-bold">{priceItem.assignedProducts.length}</span>
                     ) : (
