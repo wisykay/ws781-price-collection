@@ -234,7 +234,7 @@ export default function AssignProductPage() {
                     {modalPrice.assignedProducts.map((product) => (
                       <div
                         key={product.id}
-                        className="flex items-center gap-3 p-2 bg-slate-100 rounded-xl border border-slate-200"
+                        className="flex items-center gap-3 p-2 bg-slate-700 rounded-xl"
                       >
                         <img
                           src={product.image}
@@ -242,13 +242,13 @@ export default function AssignProductPage() {
                           className="w-12 h-12 rounded-lg object-cover"
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-slate-800">{product.name}</p>
-                          <p className="text-xs text-slate-500">{product.variant}</p>
+                          <p className="text-sm font-medium text-white">{product.name}</p>
+                          <p className="text-xs text-slate-300">{product.variant}</p>
                         </div>
                         <button
                           data-testid={`button-remove-modal-${product.id}`}
                           onClick={() => removeProductFromPrice(modalPrice.id, product.id)}
-                          className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-slate-400 hover:text-red-500"
+                          className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-600 text-slate-300 hover:text-white"
                         >
                           <X className="w-4 h-4" />
                         </button>
@@ -394,7 +394,7 @@ export default function AssignProductPage() {
                             key={product.id}
                             src={product.image}
                             alt={product.name}
-                            className="w-8 h-8 rounded-md object-cover border-2 border-slate-400"
+                            className="w-8 h-8 rounded-md object-cover border-2 border-slate-700"
                           />
                         ))}
                         {priceItem.assignedProducts.length > 3 && (
