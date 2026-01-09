@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Search, Check, Pencil, X, Image, Plus } from "lucide-react";
+import { ArrowLeft, Search, Check, Pencil, X, Image, Plus, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Product {
@@ -410,6 +410,9 @@ export default function AssignProductPage() {
                     </button>
                   </div>
 
+                  {/* Separator */}
+                  <div className={`w-px h-10 ${hasProducts ? 'bg-slate-500' : 'bg-slate-200'}`} />
+
                   {/* Products area */}
                   <div className="flex-1 min-w-0">
                     {hasProducts ? (
@@ -423,8 +426,8 @@ export default function AssignProductPage() {
                           />
                         ))}
                         {priceItem.assignedProducts.length > 3 && (
-                          <span className="w-9 h-9 rounded-lg bg-slate-700 flex items-center justify-center text-xs font-medium text-white">
-                            +{priceItem.assignedProducts.length - 3}
+                          <span className="w-9 h-9 rounded-lg bg-slate-600 flex items-center justify-center text-sm font-medium text-white">
+                            ...
                           </span>
                         )}
                       </div>
@@ -433,12 +436,15 @@ export default function AssignProductPage() {
                     )}
                   </div>
 
-                  {/* Add button for empty rows only */}
-                  {!hasProducts && (
-                    <div className="w-9 h-9 flex items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  {/* Count + chevron at end */}
+                  <div className={`flex items-center gap-1 ${hasProducts ? 'text-white' : 'text-primary'}`}>
+                    {hasProducts ? (
+                      <span className="text-sm font-bold">{priceItem.assignedProducts.length}</span>
+                    ) : (
                       <Plus className="w-4 h-4" />
-                    </div>
-                  )}
+                    )}
+                    <ChevronDown className="w-4 h-4" />
+                  </div>
                 </div>
               </motion.div>
             );
