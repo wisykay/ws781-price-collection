@@ -200,9 +200,10 @@ export default function CategoriesPage() {
                     <button
                       data-testid={`button-capture-${category.id}`}
                       onClick={() => navigate("/camera")}
-                      className="w-11 h-11 rounded-xl bg-primary flex items-center justify-center text-white hover:bg-primary/90 transition-colors"
+                      className="h-11 px-4 rounded-xl bg-primary flex items-center justify-center gap-2 text-white hover:bg-primary/90 transition-colors"
                     >
-                      <Camera className="w-5 h-5" />
+                      <Camera className="w-4 h-4" />
+                      <span className="text-sm font-medium">Capturar</span>
                     </button>
                   </div>
                   
