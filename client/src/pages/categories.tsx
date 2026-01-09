@@ -203,7 +203,7 @@ export default function CategoriesPage() {
                       className="h-11 px-4 rounded-xl bg-primary flex items-center justify-center gap-2 text-white hover:bg-primary/90 transition-colors"
                     >
                       <Camera className="w-4 h-4" />
-                      <span className="text-sm font-medium">Capturar</span>
+                      <span className="text-sm font-medium">Capturar precio</span>
                     </button>
                   </div>
                   
