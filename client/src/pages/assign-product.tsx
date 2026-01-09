@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Search, Check, X, Plus, Pencil } from "lucide-react";
+import { ArrowLeft, Search, Check, X, Plus, Pencil, Settings2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Product {
@@ -423,8 +423,17 @@ export default function AssignProductPage() {
                         ? 'bg-slate-700 text-white hover:bg-slate-600' 
                         : 'bg-primary text-white hover:bg-primary/90'}`}
                     >
-                      <Plus className="w-3.5 h-3.5" />
-                      <span>{hasProducts ? 'Modificar' : 'Asignar'}</span>
+                      {hasProducts ? (
+                        <>
+                          <Settings2 className="w-3.5 h-3.5" />
+                          <span>Modificar</span>
+                        </>
+                      ) : (
+                        <>
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>Asignar</span>
+                        </>
+                      )}
                     </button>
                   </div>
                 </motion.div>
