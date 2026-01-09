@@ -376,19 +376,11 @@ export default function AssignProductPage() {
                   {/* Card Header */}
                   <div className="flex items-start gap-3 mb-3">
                     {/* Price Tag Image */}
-                    <div className="relative">
-                      <img
-                        src={priceItem.image}
-                        alt="Price tag"
-                        className="w-16 h-16 rounded-xl object-cover"
-                      />
-                      <button
-                        onClick={() => setPreviewImage(priceItem)}
-                        className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white shadow-md border border-slate-200 flex items-center justify-center text-primary"
-                      >
-                        <Eye className="w-3 h-3" />
-                      </button>
-                    </div>
+                    <img
+                      src={priceItem.image}
+                      alt="Price tag"
+                      className="w-16 h-16 rounded-xl object-cover"
+                    />
                     
                     {/* Price Info */}
                     <div className="flex-1">
@@ -405,19 +397,7 @@ export default function AssignProductPage() {
                     </div>
                   </div>
                   
-                  {/* Progress Bar */}
-                  <div className="mb-4">
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="h-1.5 flex-1 bg-slate-100 rounded-full overflow-hidden mr-3">
-                        <div 
-                          className="h-full bg-primary rounded-full transition-all"
-                          style={{ width: `${Math.min(priceProgress, 100)}%` }}
-                        />
-                      </div>
-                      <span className="text-xs font-semibold text-slate-500">{Math.min(Math.round(priceProgress), 100)}%</span>
-                    </div>
-                  </div>
-                  
+                                    
                   {/* Assigned Products Preview */}
                   {hasProducts && (
                     <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
@@ -439,8 +419,8 @@ export default function AssignProductPage() {
                       onClick={() => setPreviewImage(priceItem)}
                       className="flex-1 flex items-center justify-center gap-2 h-11 rounded-xl border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 transition-colors"
                     >
-                      <Eye className="w-4 h-4" />
-                      <span>Ver Foto</span>
+                      <Pencil className="w-4 h-4" />
+                      <span>Actualizar Precio</span>
                     </button>
                     <button
                       onClick={() => setModalPriceId(priceItem.id)}
