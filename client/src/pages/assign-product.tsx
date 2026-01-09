@@ -234,7 +234,7 @@ export default function AssignProductPage() {
                     {modalPrice.assignedProducts.map((product) => (
                       <div
                         key={product.id}
-                        className="flex items-center gap-3 p-2 bg-emerald-50 rounded-xl border border-emerald-200"
+                        className="flex items-center gap-3 p-2 bg-slate-100 rounded-xl border border-slate-200"
                       >
                         <img
                           src={product.image}
@@ -360,7 +360,7 @@ export default function AssignProductPage() {
                   onClick={() => setModalPriceId(priceItem.id)}
                   data-testid={`price-row-${priceItem.id}`}
                 >
-                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${hasProducts ? 'bg-emerald-50' : 'bg-primary/5'}`}>
+                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${hasProducts ? 'bg-primary/10' : 'bg-primary/5'}`}>
                     {editingPriceId === priceItem.id ? (
                       <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
                         <span className="text-sm font-bold text-primary">$</span>
@@ -380,7 +380,7 @@ export default function AssignProductPage() {
                         />
                       </div>
                     ) : (
-                      <span className={`text-lg font-bold ${hasProducts ? 'text-emerald-600' : 'text-primary'}`}>
+                      <span className={`text-lg font-bold ${hasProducts ? 'text-primary' : 'text-primary'}`}>
                         ${priceItem.price.toFixed(2)}
                       </span>
                     )}
@@ -394,7 +394,7 @@ export default function AssignProductPage() {
                             key={product.id}
                             src={product.image}
                             alt={product.name}
-                            className="w-8 h-8 rounded-md object-cover border-2 border-emerald-300"
+                            className="w-8 h-8 rounded-md object-cover border-2 border-slate-400"
                           />
                         ))}
                         {priceItem.assignedProducts.length > 3 && (
@@ -431,7 +431,7 @@ export default function AssignProductPage() {
                       <Pencil className="w-4 h-4" />
                     </button>
 
-                    <div className={`w-8 h-8 flex items-center justify-center rounded-lg ${hasProducts ? 'bg-emerald-100 text-emerald-600' : 'bg-primary/10 text-primary'}`}>
+                    <div className={`w-8 h-8 flex items-center justify-center rounded-lg ${hasProducts ? 'bg-primary/20 text-primary' : 'bg-primary/10 text-primary'}`}>
                       {hasProducts ? (
                         <span className="text-xs font-bold">{priceItem.assignedProducts.length}</span>
                       ) : (
