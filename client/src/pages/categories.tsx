@@ -173,29 +173,48 @@ export default function CategoriesPage() {
               <p className="text-slate-500">Selecciona una categoría para continuar</p>
             </div>
             
-            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 divide-y divide-slate-100">
+            <div className="space-y-6">
               {categories.map((category, index) => (
-                <motion.button
+                <motion.div
                   key={category.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                   data-testid={`card-category-${category.id}`}
-                  onClick={() => navigate("/camera")}
-                  className="w-full flex items-center gap-5 p-5 hover:bg-slate-50 transition-colors first:rounded-t-3xl last:rounded-b-3xl"
+                  className="flex flex-col"
                 >
-                  <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden flex-shrink-0">
-                    <img
-                      src={category.image}
-                      alt={category.name}
-                      className="w-14 h-14 object-cover rounded-lg"
-                    />
+                  <div className="flex items-center gap-5 mb-3">
+                    <div className="w-20 h-20 rounded-full bg-slate-200 flex items-center justify-center overflow-hidden flex-shrink-0">
+                      <img
+                        src={category.image}
+                        alt={category.name}
+                        className="w-14 h-14 object-cover rounded-lg"
+                      />
+                    </div>
+                    
+                    <div className="text-left">
+                      <h3 className="text-lg font-semibold text-slate-900">{category.name}</h3>
+                    </div>
                   </div>
                   
-                  <div className="text-left">
-                    <h3 className="text-lg font-semibold text-slate-900">{category.name}</h3>
+                  <div className="flex gap-2 pl-1">
+                    <Button
+                      data-testid={`button-capture-${category.id}`}
+                      onClick={() => navigate("/camera")}
+                      className="flex-1 h-11 rounded-2xl bg-primary hover:bg-primary/90 font-semibold"
+                    >
+                      Agregar fotos
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      data-testid={`button-manual-${category.id}`}
+                      className="flex-1 h-11 rounded-2xl border-slate-200 text-slate-700 hover:bg-slate-50 font-medium"
+                    >
+                      Carga manual
+                    </Button>
                   </div>
-                </motion.button>
+                </motion.div>
               ))}
             </div>
           </>
