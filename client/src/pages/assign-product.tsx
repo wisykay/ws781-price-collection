@@ -64,6 +64,7 @@ export default function AssignProductPage() {
   const [editValue, setEditValue] = useState("");
   const [previewImage, setPreviewImage] = useState<DetectedPrice | null>(null);
   const [viewMode, setViewMode] = useState<"list" | "cards">("list");
+  const [darkMode, setDarkMode] = useState(false);
 
   const totalProductsAssigned = prices.reduce((sum, p) => sum + p.assignedProducts.length, 0);
   const totalProducts = allProducts.length;
@@ -343,16 +344,23 @@ export default function AssignProductPage() {
         </div>
 
         {/* View Mode Switcher */}
-        <div className="px-4 pb-3">
+        <div className="px-4 pb-3 flex gap-2">
           <select
             value={viewMode}
             onChange={(e) => setViewMode(e.target.value as "list" | "cards")}
             data-testid="select-view-mode"
-            className="w-full h-10 px-3 rounded-xl bg-slate-50 border border-slate-200 text-sm font-medium text-slate-700 outline-none focus:border-primary cursor-pointer"
+            className="flex-1 h-10 px-3 rounded-xl bg-slate-50 border border-slate-200 text-sm font-medium text-slate-700 outline-none focus:border-primary cursor-pointer"
           >
             <option value="list">Vista Lista</option>
             <option value="cards">Vista Tarjetas</option>
           </select>
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            data-testid="button-dark-mode"
+            className={`h-10 px-4 rounded-xl text-sm font-medium transition-colors ${darkMode ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-700 border border-slate-200'}`}
+          >
+            {darkMode ? '☀️ Light' : '🌙 Dark'}
+          </button>
         </div>
       </header>
 
@@ -370,25 +378,35 @@ export default function AssignProductPage() {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.03 }}
-                  className={`rounded-2xl overflow-hidden ${hasProducts ? 'bg-slate-700' : 'bg-white shadow-sm border border-slate-100'}`}
+                  className={`rounded-2xl overflow-hidden ${hasProducts 
+                    ? (darkMode ? 'bg-slate-700' : 'bg-slate-200 border border-slate-300') 
+                    : (darkMode ? 'bg-slate-800 border border-slate-700' : 'bg-white shadow-sm border border-slate-100')}`}
                   data-testid={`price-card-${priceItem.id}`}
                 >
                   {/* Card Top - Price Display */}
                   <div className={`flex items-center gap-4 p-4 ${hasProducts ? '' : 'border-b border-slate-100'}`}>
                     {/* Large Price */}
-                    <div className={`w-20 h-20 rounded-2xl flex items-center justify-center ${hasProducts ? 'bg-slate-600' : 'bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200'}`}>
-                      <span className={`text-2xl font-bold ${hasProducts ? 'text-white' : 'text-slate-800'}`}>
+                    <div className={`w-20 h-20 rounded-2xl flex items-center justify-center ${hasProducts 
+                      ? (darkMode ? 'bg-slate-600' : 'bg-slate-400') 
+                      : (darkMode ? 'bg-slate-700 border border-slate-600' : 'bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200')}`}>
+                      <span className={`text-2xl font-bold ${hasProducts 
+                        ? 'text-white' 
+                        : (darkMode ? 'text-white' : 'text-slate-800')}`}>
                         ${priceItem.price.toFixed(2)}
                       </span>
                     </div>
                     
                     {/* Info & Status */}
                     <div className="flex-1">
-                      <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold mb-2 ${hasProducts ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-100 text-amber-700'}`}>
+                      <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold mb-2 ${hasProducts 
+                        ? (darkMode ? 'bg-emerald-500/20 text-emerald-300' : 'bg-emerald-100 text-emerald-700') 
+                        : (darkMode ? 'bg-amber-500/20 text-amber-300' : 'bg-amber-100 text-amber-700')}`}>
                         <div className={`w-1.5 h-1.5 rounded-full ${hasProducts ? 'bg-emerald-400' : 'bg-amber-500'}`} />
                         {hasProducts ? "Completado" : "Pendiente"}
                       </div>
-                      <p className={`text-sm ${hasProducts ? 'text-slate-300' : 'text-slate-500'}`}>
+                      <p className={`text-sm ${hasProducts 
+                        ? (darkMode ? 'text-slate-300' : 'text-slate-600') 
+                        : (darkMode ? 'text-slate-400' : 'text-slate-500')}`}>
                         {hasProducts ? `${priceItem.assignedProducts.length} productos asignados` : "Esperando asignación"}
                       </p>
                     </div>
@@ -410,11 +428,11 @@ export default function AssignProductPage() {
                             key={product.id}
                             src={product.image}
                             alt={product.name}
-                            className="w-8 h-8 rounded-lg object-cover border-2 border-slate-500"
+                            className={`w-8 h-8 rounded-lg object-cover border-2 ${darkMode ? 'border-slate-500' : 'border-slate-300'}`}
                           />
                         ))}
                         {priceItem.assignedProducts.length > 5 && (
-                          <span className="w-8 h-8 rounded-lg bg-slate-500 flex items-center justify-center text-xs font-medium text-white">
+                          <span className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-medium ${darkMode ? 'bg-slate-500 text-white' : 'bg-slate-400 text-white'}`}>
                             +{priceItem.assignedProducts.length - 5}
                           </span>
                         )}
@@ -423,17 +441,23 @@ export default function AssignProductPage() {
                   )}
                   
                   {/* Action Buttons */}
-                  <div className={`flex gap-2 p-3 ${hasProducts ? 'bg-slate-800/50' : 'bg-slate-50'}`}>
+                  <div className={`flex gap-2 p-3 ${hasProducts 
+                    ? (darkMode ? 'bg-slate-800/50' : 'bg-slate-300/50') 
+                    : (darkMode ? 'bg-slate-700/50' : 'bg-slate-50')}`}>
                     <button
                       onClick={() => setPreviewImage(priceItem)}
-                      className={`flex-1 flex items-center justify-center gap-2 h-10 rounded-xl text-sm font-medium transition-colors ${hasProducts ? 'bg-slate-600 text-white hover:bg-slate-500' : 'border border-slate-300 text-slate-600 hover:bg-white'}`}
+                      className={`flex-1 flex items-center justify-center gap-2 h-10 rounded-xl text-sm font-medium transition-colors ${hasProducts 
+                        ? (darkMode ? 'bg-slate-600 text-white hover:bg-slate-500' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-300') 
+                        : (darkMode ? 'bg-slate-600 text-white hover:bg-slate-500' : 'border border-slate-300 text-slate-600 hover:bg-white')}`}
                     >
                       <Pencil className="w-3.5 h-3.5" />
                       <span>Editar</span>
                     </button>
                     <button
                       onClick={() => setModalPriceId(priceItem.id)}
-                      className={`flex-1 flex items-center justify-center gap-2 h-10 rounded-xl text-sm font-medium transition-colors ${hasProducts ? 'bg-white text-slate-700 hover:bg-slate-100' : 'bg-primary text-white hover:bg-primary/90'}`}
+                      className={`flex-1 flex items-center justify-center gap-2 h-10 rounded-xl text-sm font-medium transition-colors ${hasProducts 
+                        ? (darkMode ? 'bg-white text-slate-700 hover:bg-slate-100' : 'bg-slate-700 text-white hover:bg-slate-600') 
+                        : 'bg-primary text-white hover:bg-primary/90'}`}
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>{hasProducts ? 'Modificar' : 'Asignar'}</span>
