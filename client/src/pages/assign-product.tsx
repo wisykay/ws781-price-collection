@@ -401,7 +401,7 @@ export default function AssignProductPage() {
                         )}
                       </div>
                     ) : (
-                      <p className="text-sm text-slate-400">Toca para asignar productos</p>
+                      <p className="text-sm text-primary font-medium">Toca para asignar productos</p>
                     )}
                   </div>
 
