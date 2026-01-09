@@ -76,7 +76,7 @@ export default function CategoriesPage() {
         </div>
 
         <div className="relative mb-6">
-          <p className="text-xs font-medium text-slate-500 mb-2 ml-1">Moneda para captura de precios</p>
+          <p className="text-xs font-medium text-slate-500 mb-2 ml-1">Seleccionar moneda</p>
           <button
             data-testid="button-currency-selector"
             onClick={() => setCurrencyOpen(!currencyOpen)}
@@ -207,7 +207,7 @@ export default function CategoriesPage() {
                       className="h-11 px-4 rounded-xl bg-primary flex items-center justify-center gap-2 text-white hover:bg-primary/90 transition-colors"
                     >
                       <Camera className="w-4 h-4" />
-                      <span className="text-sm font-medium">Capturar precio</span>
+                      <span className="text-sm font-medium">Capturar precio $</span>
                     </button>
                   </div>
                   
