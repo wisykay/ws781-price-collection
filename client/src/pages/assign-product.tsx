@@ -343,7 +343,8 @@ export default function AssignProductPage() {
       </header>
 
       <main className="flex-1 px-4 py-4 pb-28">
-        <div className="divide-y divide-slate-200">
+        <div className="bg-white rounded-2xl p-4 shadow-sm">
+          <div className="divide-y divide-slate-100">
           {prices.map((priceItem, index) => {
             const hasProducts = priceItem.assignedProducts.length > 0;
             
@@ -376,9 +377,9 @@ export default function AssignProductPage() {
                   </button>
                 </div>
 
-                {/* Products box - separate container */}
+                {/* Products box - unified styling */}
                 <div 
-                  className={`flex-1 flex items-center gap-3 p-3 rounded-xl cursor-pointer ${hasProducts ? 'bg-slate-100 border-2 border-slate-700' : 'bg-white border border-slate-200'}`}
+                  className={`flex-1 flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all ${hasProducts ? 'bg-slate-700 text-white' : 'bg-slate-50 hover:bg-slate-100'}`}
                   onClick={() => setModalPriceId(priceItem.id)}
                 >
                   {/* Products area */}
@@ -390,11 +391,11 @@ export default function AssignProductPage() {
                             key={product.id}
                             src={product.image}
                             alt={product.name}
-                            className="w-9 h-9 rounded-lg object-cover border-2 border-slate-600"
+                            className="w-9 h-9 rounded-lg object-cover border-2 border-white/30"
                           />
                         ))}
                         {priceItem.assignedProducts.length > 3 && (
-                          <span className="w-9 h-9 rounded-lg bg-slate-600 flex items-center justify-center text-sm font-medium text-white">
+                          <span className="w-9 h-9 rounded-lg bg-slate-600 flex items-center justify-center text-sm font-medium text-white/80">
                             ...
                           </span>
                         )}
@@ -405,7 +406,7 @@ export default function AssignProductPage() {
                   </div>
 
                   {/* Count badge + chevron */}
-                  <div className={`flex items-center gap-1 px-2 py-1 rounded-lg ${hasProducts ? 'bg-slate-700 text-white' : 'bg-primary/10 text-primary'}`}>
+                  <div className={`flex items-center gap-1 px-2 py-1 rounded-lg ${hasProducts ? 'bg-slate-600 text-white' : 'bg-slate-200 text-slate-600'}`}>
                     {hasProducts ? (
                       <span className="text-sm font-bold">{priceItem.assignedProducts.length}</span>
                     ) : (
@@ -417,6 +418,7 @@ export default function AssignProductPage() {
               </motion.div>
             );
           })}
+          </div>
         </div>
       </main>
 
