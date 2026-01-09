@@ -388,12 +388,12 @@ export default function AssignProductPage() {
                             startEditingPrice(priceItem);
                           }}
                           data-testid={`button-edit-${priceItem.id}`}
-                          className="flex items-center gap-0.5"
+                          className="flex items-center gap-1"
                         >
                           <span className={`text-lg font-bold ${hasProducts ? 'text-white' : 'text-primary'}`}>
                             ${priceItem.price.toFixed(2)}
                           </span>
-                          <Pencil className={`w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity ${hasProducts ? 'text-slate-300' : 'text-primary/50'}`} />
+                          <Pencil className={`w-3 h-3 ${hasProducts ? 'text-slate-400' : 'text-primary/40'}`} />
                         </button>
                       )}
                     </div>
@@ -433,14 +433,12 @@ export default function AssignProductPage() {
                     )}
                   </div>
 
-                  {/* Count badge */}
-                  <div className={`w-9 h-9 flex items-center justify-center rounded-xl ${hasProducts ? 'bg-slate-700 text-white' : 'bg-primary/10 text-primary'}`}>
-                    {hasProducts ? (
-                      <span className="text-sm font-bold">{priceItem.assignedProducts.length}</span>
-                    ) : (
+                  {/* Add button for empty rows only */}
+                  {!hasProducts && (
+                    <div className="w-9 h-9 flex items-center justify-center rounded-xl bg-primary/10 text-primary">
                       <Plus className="w-4 h-4" />
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             );
