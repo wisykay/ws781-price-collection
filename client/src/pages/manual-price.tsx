@@ -38,6 +38,8 @@ const initialProducts: Product[] = [
 export default function ManualPricePage() {
   const [, navigate] = useLocation();
   const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [activeProduct, setActiveProduct] = useState<Product | null>(null);
+  const [tempPrice, setTempPrice] = useState("");
     
   const filledCount = products.filter(p => p.price && parseFloat(p.price) > 0).length;
   const totalProducts = products.length;
@@ -47,6 +49,33 @@ export default function ManualPricePage() {
     setProducts(products.map(p => 
       p.id === productId ? { ...p, price: value } : p
     ));
+  };
+
+  const openNumpad = (product: Product) => {
+    setActiveProduct(product);
+    setTempPrice(product.price);
+  };
+
+  const handleNumpadPress = (key: string) => {
+    if (key === "C") {
+      setTempPrice("");
+    } else if (key === "⌫") {
+      setTempPrice(prev => prev.slice(0, -1));
+    } else if (key === ".") {
+      if (!tempPrice.includes(".")) {
+        setTempPrice(prev => prev + ".");
+      }
+    } else {
+      setTempPrice(prev => prev + key);
+    }
+  };
+
+  const confirmPrice = () => {
+    if (activeProduct) {
+      handlePriceChange(activeProduct.id, tempPrice);
+      setActiveProduct(null);
+      setTempPrice("");
+    }
   };
 
   const handleConfirmAll = () => {
@@ -123,22 +152,17 @@ export default function ManualPricePage() {
                 <p className="text-xs text-slate-400">SKU: {product.sku}</p>
               </div>
               
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-400">$</span>
-                <input
-                  type="number"
-                  step="0.01"
-                  placeholder="0.00"
-                  value={product.price}
-                  onChange={(e) => handlePriceChange(product.id, e.target.value)}
-                  className={`w-20 h-11 pl-7 pr-2 rounded-xl border-2 text-right text-lg font-bold outline-none transition-colors ${
-                    product.price && parseFloat(product.price) > 0
-                      ? "border-primary bg-primary/5 text-primary"
-                      : "border-slate-200 bg-slate-50 text-slate-700 focus:border-primary"
-                  }`}
-                  data-testid={`input-price-${product.id}`}
-                />
-              </div>
+              <button
+                onClick={() => openNumpad(product)}
+                className={`w-20 h-11 rounded-xl border-2 flex items-center justify-center text-lg font-bold transition-colors ${
+                  product.price && parseFloat(product.price) > 0
+                    ? "border-primary bg-primary/5 text-primary"
+                    : "border-slate-200 bg-slate-50 text-slate-400"
+                }`}
+                data-testid={`input-price-${product.id}`}
+              >
+                {product.price && parseFloat(product.price) > 0 ? product.price : "0.00"}
+              </button>
             </motion.div>
           ))}
         </div>
@@ -157,6 +181,67 @@ export default function ManualPricePage() {
           }
         </Button>
       </div>
+
+      {activeProduct && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 z-50 bg-black/50 flex items-end"
+          onClick={() => setActiveProduct(null)}
+        >
+          <motion.div
+            initial={{ y: 100 }}
+            animate={{ y: 0 }}
+            className="w-full bg-white rounded-t-3xl p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-center mb-6">
+              <p className="text-sm text-slate-500 mb-1">Precio</p>
+              <div className="flex items-center justify-center gap-1">
+                <span className="text-3xl font-bold text-primary">$</span>
+                <span className="text-5xl font-bold text-primary">
+                  {tempPrice || "0"}
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 mt-2 line-clamp-1">{activeProduct.name}</p>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 mb-4">
+              {["1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "0", "⌫"].map((key) => (
+                <button
+                  key={key}
+                  onClick={() => handleNumpadPress(key)}
+                  className={`h-16 rounded-2xl text-2xl font-bold transition-colors ${
+                    key === "⌫"
+                      ? "bg-slate-100 text-slate-600 active:bg-slate-200"
+                      : "bg-slate-100 text-primary active:bg-slate-200"
+                  }`}
+                  data-testid={`numpad-${key}`}
+                >
+                  {key}
+                </button>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => handleNumpadPress("C")}
+                className="h-14 rounded-2xl bg-red-100 text-red-500 font-bold text-lg"
+                data-testid="numpad-clear"
+              >
+                C
+              </button>
+              <Button
+                onClick={confirmPrice}
+                className="h-14 rounded-2xl bg-primary font-bold text-lg"
+                data-testid="numpad-confirm"
+              >
+                Listo
+              </Button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   );
 }
