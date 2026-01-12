@@ -113,7 +113,7 @@ export default function CameraPage() {
             </button>
             <Button
               data-testid="button-continue"
-              onClick={() => navigate("/select-price")}
+              onClick={() => navigate("/assign-product")}
               className="h-12 px-8 rounded-lg bg-primary hover:bg-primary/90 font-semibold"
             >
               Continue
