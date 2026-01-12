@@ -96,25 +96,25 @@ export default function CameraPage() {
             ))}
           </div>
 
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex items-center justify-center gap-3">
             <button
               data-testid="button-retake"
               onClick={() => setShowPreview(false)}
-              className="w-12 h-12 flex items-center justify-center rounded-full bg-white border border-slate-200 text-primary"
+              className="w-12 h-12 flex items-center justify-center rounded-lg bg-white border border-slate-200 text-primary"
             >
               <RotateCcw className="w-5 h-5" />
             </button>
             <button
               data-testid="button-add-more"
               onClick={() => setShowPreview(false)}
-              className="w-12 h-12 flex items-center justify-center rounded-full bg-white border border-slate-200 text-primary"
+              className="w-12 h-12 flex items-center justify-center rounded-lg bg-white border border-slate-200 text-primary"
             >
               <Camera className="w-5 h-5" />
             </button>
             <Button
               data-testid="button-continue"
               onClick={() => navigate("/select-price")}
-              className="h-12 px-8 rounded-full bg-primary hover:bg-primary/90 font-semibold"
+              className="h-12 px-8 rounded-lg bg-primary hover:bg-primary/90 font-semibold"
             >
               Continue
               <ArrowRight className="w-4 h-4 ml-2" />
