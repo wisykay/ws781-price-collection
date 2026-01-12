@@ -187,7 +187,7 @@ export default function CategoriesPage() {
                   data-testid={`card-category-${category.id}`}
                   className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100"
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 mb-3">
                     <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden flex-shrink-0">
                       <img
                         src={category.image}
@@ -197,19 +197,19 @@ export default function CategoriesPage() {
                     </div>
                     
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-base font-semibold text-slate-900">{category.name}</h3>
+                      <h3 className="text-base font-semibold text-slate-900 truncate">{category.name}</h3>
                       <p className="text-sm text-slate-400">7 de 18 productos</p>
                     </div>
-                    
-                    <button
-                      data-testid={`button-capture-${category.id}`}
-                      onClick={() => navigate("/camera")}
-                      className="h-11 px-4 rounded-xl bg-primary flex items-center justify-center gap-2 text-white hover:bg-primary/90 transition-colors"
-                    >
-                      <Camera className="w-4 h-4" />
-                      <span className="text-sm font-medium">Capturar precio $</span>
-                    </button>
                   </div>
+                  
+                  <button
+                    data-testid={`button-capture-${category.id}`}
+                    onClick={() => navigate("/camera")}
+                    className="w-full h-11 rounded-xl bg-primary flex items-center justify-center gap-2 text-white hover:bg-primary/90 transition-colors"
+                  >
+                    <Camera className="w-4 h-4" />
+                    <span className="text-sm font-medium">Capturar precio $</span>
+                  </button>
                   
                   <div className="mt-3 h-1.5 bg-slate-100 rounded-full overflow-hidden">
                     <div className="h-full bg-primary rounded-full" style={{ width: '39%' }} />
