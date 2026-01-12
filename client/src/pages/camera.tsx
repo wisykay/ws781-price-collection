@@ -124,43 +124,23 @@ export default function CameraPage() {
 
   return (
     <div className="min-h-screen bg-black flex flex-col">
-      <div className="relative flex-1 flex items-center justify-center">
+      <div className="relative flex-1">
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-30"
+          className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=800&h=1200&fit=crop')`,
           }}
         />
 
-        <div className="relative z-10 flex flex-col items-center">
-          <button
-            data-testid="button-capture"
-            onClick={handleCapture}
-            className="w-20 h-20 rounded-full bg-white/20 border-4 border-white flex items-center justify-center hover:scale-105 transition-transform active:scale-95"
-          >
-            <div className="w-14 h-14 rounded-full bg-white" />
-          </button>
-          
-          {captures.length > 0 && (
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-4 text-white font-medium"
-            >
-              {captures.length} Photo{captures.length > 1 ? "s" : ""}
-            </motion.p>
-          )}
-        </div>
-
         {captures.length > 0 && (
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="absolute left-4 bottom-32"
+            className="absolute left-4 bottom-4"
           >
             <button
               onClick={() => setShowPreview(true)}
-              className="w-16 h-16 rounded-xl overflow-hidden border-2 border-white/50"
+              className="w-14 h-14 rounded-xl overflow-hidden border-2 border-white/50"
             >
               <img
                 src={captures[captures.length - 1]}
@@ -172,7 +152,25 @@ export default function CameraPage() {
         )}
       </div>
 
-      <div className="p-4 pb-8">
+      <div className="bg-black px-4 py-6 flex flex-col items-center">
+        <button
+          data-testid="button-capture"
+          onClick={handleCapture}
+          className="w-20 h-20 rounded-full bg-white/20 border-4 border-white flex items-center justify-center hover:scale-105 transition-transform active:scale-95 mb-3"
+        >
+          <div className="w-14 h-14 rounded-full bg-white" />
+        </button>
+        
+        {captures.length > 0 && (
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-white font-medium mb-4"
+          >
+            {captures.length} Photo{captures.length > 1 ? "s" : ""}
+          </motion.p>
+        )}
+
         <Button
           data-testid="button-done"
           onClick={handleDone}
