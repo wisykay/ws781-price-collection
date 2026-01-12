@@ -139,7 +139,7 @@ export default function ManualPricePage() {
               className="flex items-center gap-3 p-3"
               data-testid={`product-row-${product.id}`}
             >
-              <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center overflow-hidden flex-shrink-0 border border-slate-200 shadow-sm">
+              <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center overflow-hidden flex-shrink-0 border border-slate-200">
                 <img
                   src={product.image}
                   alt={product.name}
