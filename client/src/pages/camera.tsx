@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 const priceTagImages = [
   "/price_tag_1.jpg",
   "/price_tag_2.jpg",
+  "/price_tag_3.jpg",
+  "/price_tag_4.jpg",
+  "/price_tag_5.jpg",
 ];
 
 export default function CameraPage() {
@@ -97,14 +100,14 @@ export default function CameraPage() {
             <button
               data-testid="button-retake"
               onClick={() => setShowPreview(false)}
-              className="w-12 h-12 flex items-center justify-center rounded-full bg-slate-100 text-slate-600"
+              className="w-12 h-12 flex items-center justify-center rounded-full bg-white border border-slate-200 text-primary"
             >
               <RotateCcw className="w-5 h-5" />
             </button>
             <button
               data-testid="button-add-more"
               onClick={() => setShowPreview(false)}
-              className="w-12 h-12 flex items-center justify-center rounded-full bg-slate-100 text-slate-700"
+              className="w-12 h-12 flex items-center justify-center rounded-full bg-white border border-slate-200 text-primary"
             >
               <Camera className="w-5 h-5" />
             </button>
