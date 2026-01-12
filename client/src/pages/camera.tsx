@@ -51,7 +51,7 @@ export default function CameraPage() {
         </header>
 
         <main className="flex-1 p-4 pb-2 overflow-hidden">
-          <div className="relative bg-slate-100 rounded-2xl overflow-hidden h-full max-h-[60vh]">
+          <div className="relative bg-slate-100 rounded-2xl overflow-hidden h-full">
             <img
               src={captures[currentImage] || captures[0]}
               alt="Price tag"
