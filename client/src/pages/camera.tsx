@@ -50,12 +50,12 @@ export default function CameraPage() {
           </button>
         </header>
 
-        <main className="flex-1 p-4 flex flex-col">
-          <div className="relative bg-slate-100 rounded-2xl overflow-hidden flex-1">
+        <main className="flex-1 p-4 pb-0 overflow-hidden">
+          <div className="relative bg-slate-100 rounded-2xl overflow-hidden h-full max-h-[60vh]">
             <img
               src={captures[currentImage] || captures[0]}
               alt="Price tag"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
             <div className="absolute top-3 right-3 bg-black/60 text-white text-xs font-medium px-2 py-1 rounded-full">
               {currentImage + 1} / {captures.length}
