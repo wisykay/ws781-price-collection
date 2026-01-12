@@ -47,19 +47,21 @@ export default function CameraPage() {
           </button>
         </header>
 
-        <main className="flex-1 p-4">
-          <div className="relative bg-slate-100 rounded-2xl overflow-hidden mb-4">
+        <main className="flex-1 p-4 flex flex-col">
+          <div className="relative bg-slate-100 rounded-2xl overflow-hidden flex-1">
             <img
               src={captures[currentImage] || captures[0]}
               alt="Price tag"
-              className="w-full aspect-[4/3] object-cover"
+              className="w-full h-full object-cover"
             />
             <div className="absolute top-3 right-3 bg-black/60 text-white text-xs font-medium px-2 py-1 rounded-full">
               {currentImage + 1} / {captures.length}
             </div>
           </div>
+        </main>
 
-          <div className="flex gap-2 overflow-x-auto pb-4">
+        <div className="p-4 border-t border-slate-100">
+          <div className="flex gap-2 overflow-x-auto mb-4">
             {captures.map((img, index) => (
               <motion.div
                 key={index}
@@ -77,7 +79,7 @@ export default function CameraPage() {
                     src={img}
                     alt={`Captura ${index + 1}`}
                     data-testid={`img-capture-${index}`}
-                    className="w-16 h-16 object-cover"
+                    className="w-14 h-14 object-cover"
                   />
                 </button>
                 <button
@@ -90,10 +92,8 @@ export default function CameraPage() {
               </motion.div>
             ))}
           </div>
-        </main>
 
-        <div className="p-4 border-t border-slate-100">
-          <div className="flex items-center justify-center gap-6 mb-4">
+          <div className="flex items-center justify-center gap-4">
             <button
               data-testid="button-retake"
               onClick={() => setShowPreview(false)}
@@ -104,9 +104,9 @@ export default function CameraPage() {
             <button
               data-testid="button-add-more"
               onClick={() => setShowPreview(false)}
-              className="w-14 h-14 flex items-center justify-center rounded-full bg-slate-100 text-slate-700"
+              className="w-12 h-12 flex items-center justify-center rounded-full bg-slate-100 text-slate-700"
             >
-              <Camera className="w-6 h-6" />
+              <Camera className="w-5 h-5" />
             </button>
             <Button
               data-testid="button-continue"
