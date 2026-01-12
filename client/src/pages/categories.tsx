@@ -155,7 +155,7 @@ export default function CategoriesPage() {
                       onClick={() => navigate("/camera")}
                       className="w-full h-12 rounded-2xl bg-primary hover:bg-primary/90 font-semibold text-base"
                     >
-                      Agregar fotos
+                      Capturar precio
                       <ArrowRight className="w-5 h-5 ml-2" />
                     </Button>
                     <Button
