@@ -200,6 +200,12 @@ export default function CategoriesPage() {
                       <h3 className="text-base font-semibold text-slate-900 truncate">{category.name}</h3>
                       <p className="text-sm text-slate-400">7 de 18 productos</p>
                     </div>
+                    
+                    <div className="w-20 flex-shrink-0">
+                      <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-primary rounded-full" style={{ width: '39%' }} />
+                      </div>
+                    </div>
                   </div>
                   
                   <button
@@ -210,10 +216,6 @@ export default function CategoriesPage() {
                     <Camera className="w-4 h-4" />
                     <span className="text-sm font-medium">Capturar precio $</span>
                   </button>
-                  
-                  <div className="mt-3 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-primary rounded-full" style={{ width: '39%' }} />
-                  </div>
                   
                   <button
                     data-testid={`button-manual-${category.id}`}
