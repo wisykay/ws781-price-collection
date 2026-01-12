@@ -50,7 +50,7 @@ export default function CameraPage() {
           </button>
         </header>
 
-        <main className="flex-1 p-4 pb-0 overflow-hidden">
+        <main className="flex-1 p-4 pb-2 overflow-hidden">
           <div className="relative bg-slate-100 rounded-2xl overflow-hidden h-full max-h-[60vh]">
             <img
               src={captures[currentImage] || captures[0]}
@@ -63,7 +63,7 @@ export default function CameraPage() {
           </div>
         </main>
 
-        <div className="p-4 border-t border-slate-100">
+        <div className="px-4 pt-2 pb-4">
           <div className="flex gap-2 overflow-x-auto mb-4">
             {captures.map((img, index) => (
               <motion.div
