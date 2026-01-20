@@ -120,14 +120,12 @@ export default function CategoriesPage() {
                     
                     <div className="flex-1 min-w-0">
                       <h3 className="text-base font-semibold text-slate-900 truncate">{category.name}</h3>
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm text-slate-400">7/18 completado</p>
-                        <span className="text-xs font-semibold text-primary bg-primary/10 px-1.5 py-0.5 rounded-md">39%</span>
-                      </div>
+                      <p className="text-sm text-slate-400">7/18 completado</p>
                     </div>
                     
-                    <div className="w-20 flex-shrink-0">
-                      <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="w-20 flex-shrink-0 flex flex-col items-end gap-1">
+                      <span className="text-xs font-bold text-primary">39%</span>
+                      <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
                         <div className="h-full bg-primary rounded-full" style={{ width: '39%' }} />
                       </div>
                     </div>
