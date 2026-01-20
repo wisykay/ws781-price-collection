@@ -9,6 +9,7 @@ import CameraPage from "@/pages/camera";
 import SelectPricePage from "@/pages/select-price";
 import AssignProductPage from "@/pages/assign-product";
 import ManualPricePage from "@/pages/manual-price";
+import ReviewPage from "@/pages/review";
 
 function Router() {
   return (
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/select-price" component={SelectPricePage} />
       <Route path="/assign-product" component={AssignProductPage} />
       <Route path="/manual-price" component={ManualPricePage} />
+      <Route path="/review" component={ReviewPage} />
       <Route component={NotFound} />
     </Switch>
   );

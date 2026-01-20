@@ -87,9 +87,8 @@ export default function AssignProductPage() {
   };
 
   const handleConfirmAll = () => {
-    if (totalProductsAssigned === totalProducts) {
-      navigate("/");
-    }
+    // Navigate to review page instead of home
+    navigate("/review");
   };
 
   const addProductToPrice = (priceId: string, product: Product) => {

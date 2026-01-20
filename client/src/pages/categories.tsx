@@ -120,7 +120,10 @@ export default function CategoriesPage() {
                     
                     <div className="flex-1 min-w-0">
                       <h3 className="text-base font-semibold text-slate-900 truncate">{category.name}</h3>
-                      <p className="text-sm text-slate-400">7 de 18 productos</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm text-slate-400">7/18 completado</p>
+                        <span className="text-xs font-semibold text-primary bg-primary/10 px-1.5 py-0.5 rounded-md">39%</span>
+                      </div>
                     </div>
                     
                     <div className="w-20 flex-shrink-0">
