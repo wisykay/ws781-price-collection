@@ -79,7 +79,8 @@ export default function ManualPricePage() {
   };
 
   const handleConfirmAll = () => {
-    navigate("/");
+    // Navigate to review page
+    navigate("/review");
   };
 
   return (
