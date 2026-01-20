@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ChevronDown, Keyboard, Camera } from "lucide-react";
+import { ArrowLeft, Keyboard, Camera } from "lucide-react";
 
 interface Category {
   id: string;
@@ -27,12 +27,9 @@ const categories: Category[] = [
   },
 ];
 
-const currencies = ["USD - Dólar", "EUR - Euro", "VES - Bolívar"];
 
 export default function CategoriesPage() {
   const [, navigate] = useLocation();
-  const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
-  const [currencyOpen, setCurrencyOpen] = useState(false);
   
   return (
     <div className="min-h-screen bg-slate-50">
@@ -51,48 +48,7 @@ export default function CategoriesPage() {
 
       <main className="px-4 py-6 pb-32 max-w-lg mx-auto">
         
-        <div className="relative mb-6">
-          <p className="text-xs font-medium text-slate-500 mb-2 ml-1">Seleccionar moneda</p>
-          <button
-            data-testid="button-currency-selector"
-            onClick={() => setCurrencyOpen(!currencyOpen)}
-            className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-2xl border-2 border-primary/20 shadow-sm transition-all hover:border-primary/40"
-          >
-            <div className="flex items-center gap-2">
-              <span className="text-lg">💵</span>
-              <span className="font-semibold text-slate-800">{selectedCurrency}</span>
-            </div>
-            <ChevronDown className={`w-5 h-5 text-primary transition-transform ${currencyOpen ? "rotate-180" : ""}`} />
-          </button>
-          
-          <AnimatePresence>
-            {currencyOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl border border-slate-200 shadow-lg overflow-hidden z-10"
-              >
-                {currencies.map((currency) => (
-                  <button
-                    key={currency}
-                    data-testid={`currency-option-${currency}`}
-                    onClick={() => {
-                      setSelectedCurrency(currency);
-                      setCurrencyOpen(false);
-                    }}
-                    className={`w-full px-4 py-3 text-left hover:bg-slate-50 transition-colors ${
-                      currency === selectedCurrency ? "bg-primary/5 text-primary font-medium" : "text-slate-700"
-                    }`}
-                  >
-                    {currency}
-                  </button>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
+        
         <>
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-slate-900 mb-1">Categorías</h2>
