@@ -1,5 +1,5 @@
 import { useLocation } from "wouter";
-import { ArrowLeft, Check, Share2, FileDown } from "lucide-react";
+import { ArrowLeft, Check, Share2, FileDown, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
@@ -17,7 +17,6 @@ const reviewedProducts = [
 export default function ReviewPage() {
   const [, navigate] = useLocation();
   const totalItems = reviewedProducts.length;
-  const totalPrice = reviewedProducts.reduce((sum, item) => sum + item.price, 0);
 
   return (
     <div className="min-h-screen bg-slate-50 pb-32">
@@ -74,16 +73,17 @@ export default function ReviewPage() {
                   </div>
                 </div>
                 
-                <div className="text-right">
+                <div className="flex items-center gap-3">
                   <p className="text-base font-bold text-slate-900">${product.price.toFixed(2)}</p>
+                  <button
+                    onClick={() => navigate("/assign-product")}
+                    className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 transition-colors text-slate-600"
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </motion.div>
             ))}
-          </div>
-          
-          <div className="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
-            <span className="text-sm font-medium text-slate-600">Total valorizado</span>
-            <span className="text-xl font-bold text-primary">${totalPrice.toFixed(2)}</span>
           </div>
         </div>
       </main>
